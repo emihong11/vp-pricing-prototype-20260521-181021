@@ -42,10 +42,10 @@
     .team-size-option:hover:not(.active) { border-color:var(--navy-mid); background:#f7f9fa; }
     .team-size-option.active { background:var(--primary-green); border-color:var(--primary-green); color:var(--white); }
     .billing-wrapper { position:relative; }
-    .billing-toggle { display:flex; align-items:center; background:var(--grey-bg); border-radius:8px; padding:3px; gap:2px; }
+    .billing-toggle { display:flex; align-items:center; background:var(--white); border:1px solid #dadfe2; border-radius:8px; padding:3px; gap:2px; }
     .billing-opt { display:flex; align-items:center; gap:5px; padding:0 18px; height:36px; font-size:15px; font-weight:700; color:var(--navy); cursor:pointer; border:none; background:transparent; border-radius:6px; transition:background .15s,color .15s; white-space:nowrap; font-family:inherit; }
     .billing-opt.active { background:var(--primary-green); color:var(--white); }
-    .billing-opt:hover:not(.active) { background:rgba(255,255,255,.55); }
+    .billing-opt:hover:not(.active) { background:#f7f9fa; }
     .chevron { width:14px; height:14px; transition:transform .2s; flex-shrink:0; }
     .billing-opt.active .chevron path { stroke:var(--white); }
     .chevron.open { transform:rotate(180deg); }
@@ -66,6 +66,10 @@
     .card.highlighted { border-color:var(--navy); border-width:2px; box-shadow:0 4px 20px rgba(1,41,57,.12); }
     .card.highlighted .btn-trial { background:var(--primary-green); color:var(--white); }
     .card.highlighted .btn-trial:hover { background:var(--primary-green-dark); }
+    #screen-pricing .team-size-option.active,
+    #screen-pricing .billing-opt.active { background:var(--navy); border-color:var(--navy); color:var(--white); }
+    #screen-pricing .card.highlighted .btn-trial { background:var(--navy); color:var(--green); }
+    #screen-pricing .card.highlighted .btn-trial:hover { background:#01384f; }
     .card-top { padding:16px 16px 0; flex:0 0 auto; }
     .card-name-row { display:flex; align-items:center; justify-content:space-between; }
     .card-name { font-size:32px; font-weight:900; color:var(--navy); line-height:40px; }
