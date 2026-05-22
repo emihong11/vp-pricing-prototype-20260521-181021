@@ -969,7 +969,7 @@ function renderWZ(instant) {
       <div class="team-size-wrap">
         <div class="wizard-pill-row">
           <div class="wizard-pill-label">How many people work at your company (including you)?</div>
-          ${[[1,'Just me'],[3,'2-5 people'],[8,'6-10 people'],[15,'11-15 people'],[20,'20+ people']].map(([v,label]) => `<button class="opt-btn${(v===1?n===1:v===20?n>=20:n>=(v===3?2:v===8?6:11)&&n<=(v===3?5:v===8?10:15))?' selected':''}" onclick="setTeamRange(${v})">${label}</button>`).join('')}
+          ${[[1,'Just me'],[3,'2-5 people'],[8,'6-10 people'],[15,'11-15 people'],[16,'16+ people']].map(([v,label]) => `<button class="opt-btn${(v===1?n===1:v===16?n>=16:n>=(v===3?2:v===8?6:11)&&n<=(v===3?5:v===8?10:15))?' selected':''}" onclick="setTeamRange(${v})">${label}</button>`).join('')}
         </div>
         <div class="wizard-pill-row">
           <div class="wizard-pill-label">How many years have you been in business?</div>
