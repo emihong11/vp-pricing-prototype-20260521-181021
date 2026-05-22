@@ -25,7 +25,7 @@
 
     /* PRICING SECTION */
     .pricing-section { max-width:1440px; margin:0 auto; padding:40px 40px 56px; }
-    .controls-bar { display:flex; align-items:center; justify-content:center; gap:24px; margin-bottom:44px; flex-wrap:wrap; }
+    .controls-bar { display:flex; align-items:center; justify-content:flex-start; column-gap:40px; row-gap:16px; margin-bottom:44px; flex-wrap:wrap; }
     .control-group { display:flex; align-items:center; gap:10px; }
     .control-label { font-size:14px; font-weight:400; color:var(--navy); white-space:nowrap; }
     .stepper { display:flex; align-items:center; gap:6px; }
@@ -46,6 +46,7 @@
     .billing-opt { display:flex; align-items:center; gap:5px; padding:0 18px; height:36px; font-size:15px; font-weight:700; color:var(--navy); cursor:pointer; border:none; background:transparent; border-radius:6px; transition:background .15s,color .15s; white-space:nowrap; font-family:inherit; }
     .billing-opt.active { background:var(--primary-green); color:var(--white); }
     .billing-opt:hover:not(.active) { background:#f7f9fa; }
+    .billing-group { margin-right:-28px; }
     .chevron { width:14px; height:14px; transition:transform .2s; flex-shrink:0; }
     .billing-opt.active .chevron path { stroke:var(--white); }
     .chevron.open { transform:rotate(180deg); }
@@ -54,9 +55,16 @@
     .dropdown-opt { padding:11px 16px; font-size:14px; color:var(--navy); cursor:pointer; transition:background .1s; }
     .dropdown-opt:hover { background:#f4f7f8; }
     .dropdown-opt.selected { font-weight:600; }
-    .savings-pill { font-size:13px; color:var(--navy); }
+    .savings-pill { display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 14px; border-radius:999px; background:#eef2f3; color:var(--navy); font-size:16px; font-weight:400; line-height:20.8px; }
     .savings-pill.hidden { visibility:hidden; }
-    .savings-pill .hl { font-weight:700; text-decoration:underline; text-underline-offset:2px; }
+    .savings-pill svg { width:24px; height:24px; flex-shrink:0; }
+    #screen-pricing .savings-pill { height:auto; padding:0; border-radius:0; background:transparent; gap:4px; font-size:18px; line-height:24px; }
+    #screen-pricing .savings-pill .promo-strong { font-weight:800; text-decoration:underline; text-decoration-color:var(--green); text-decoration-thickness:3px; text-underline-offset:4px; }
+    .additional-seat-note { display:none; align-items:center; gap:8px; min-height:40px; padding:0 14px; border-radius:999px; background:#eef7dc; color:var(--navy); font-size:14px; font-weight:700; line-height:18px; }
+    .additional-seat-note.visible { display:inline-flex; }
+    .additional-seat-note svg { width:20px; height:20px; flex-shrink:0; }
+    .controls-bar .additional-seat-note,
+    .ip-controls .additional-seat-note { margin-left:auto; }
 
     /* CARDS */
     .cards-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; align-items:stretch; }
@@ -70,11 +78,20 @@
     #screen-pricing .billing-opt.active { background:var(--navy); border-color:var(--navy); color:var(--white); }
     #screen-pricing .card.highlighted .btn-trial { background:var(--navy); color:var(--green); }
     #screen-pricing .card.highlighted .btn-trial:hover { background:#01384f; }
+    #screen-pricing .card { overflow:visible; }
     .card-top { padding:16px 16px 0; flex:0 0 auto; }
     .card-name-row { display:flex; align-items:center; justify-content:space-between; }
     .card-name { font-size:32px; font-weight:900; color:var(--navy); line-height:40px; }
     .badge-rec { background:rgba(203,238,102,.5); color:var(--navy); font-size:12px; font-weight:600; padding:2px 8px; border-radius:29px; white-space:nowrap; }
     .card-users-label { font-size:14px; font-weight:600; color:var(--navy); margin-top:8px; line-height:24px; }
+    .card-users-row { display:flex; align-items:center; gap:8px; margin-top:8px; position:relative; }
+    .card-users-row .card-users-label { margin-top:0; }
+    .user-tooltip { position:relative; display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:var(--navy); color:#fff; font-size:13px; font-weight:800; line-height:1; cursor:help; flex-shrink:0; }
+    .user-tooltip-bubble { position:absolute; left:50%; bottom:calc(100% + 12px); transform:translateX(-50%); width:280px; padding:16px; border-radius:8px; background:var(--navy); color:#fff; font-size:14px; font-weight:400; line-height:20px; opacity:0; visibility:hidden; pointer-events:none; z-index:50; box-shadow:0 8px 20px rgba(1,41,57,.24); }
+    .user-tooltip-bubble::after { content:''; position:absolute; left:50%; bottom:-8px; transform:translateX(-50%); border-left:8px solid transparent; border-right:8px solid transparent; border-top:8px solid var(--navy); }
+    .user-tooltip:hover .user-tooltip-bubble,
+    .user-tooltip:focus .user-tooltip-bubble { opacity:1; visibility:visible; }
+    .user-tooltip-bubble a { color:#fff; text-decoration:underline; text-underline-offset:2px; }
     .card-desc { font-size:14px; color:var(--navy-mid); line-height:20px; margin-top:8px; min-height:60px; }
     .card-price { padding:16px 16px 0; flex:0 0 auto; }
     .price-row { display:flex; align-items:flex-end; gap:1px; }
@@ -88,7 +105,8 @@
     .btn-contact:hover { background:rgba(1,41,57,.05); }
     .btn-trial { width:100%; background:var(--green); color:var(--navy); border:none; border-radius:4px; height:40px; font-size:15px; font-weight:800; cursor:pointer; transition:background .12s; font-family:inherit; }
     .btn-trial:hover { background:var(--green-dark); }
-    .why-link { display:flex; align-items:center; justify-content:center; gap:4px; margin-top:8px; font-size:13px; font-weight:600; color:#677f88; text-decoration:none; }
+    .why-link { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:12px; font-size:14px; font-weight:700; color:#677f88; text-decoration:none; }
+    .why-link svg { width:18px; height:18px; flex-shrink:0; }
     .why-link:hover { color:var(--navy); }
     .cta-spacer { height:29px; margin-top:8px; }
     .card-features { padding:0 16px 20px; flex:1; }
@@ -104,48 +122,51 @@
     .disclaimer a { color:#345461; }
 
     /* WIZARD */
-    .wizard-screen { min-height:100vh; background:var(--grey-bg); display:flex; flex-direction:column; align-items:center; padding:40px 20px 60px; }
-    .wizard-header { width:100%; max-width:640px; display:flex; align-items:center; justify-content:space-between; margin-bottom:32px; }
+    .wizard-screen { min-height:100vh; background:#fff; display:grid; grid-template-columns:minmax(420px,42vw) 1fr; grid-template-rows:auto 1fr; column-gap:0; padding:64px 0 0 18vw; overflow:hidden; }
+    .wizard-header { width:100%; max-width:520px; display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start; gap:32px; margin-bottom:40px; grid-column:1; grid-row:1; }
     .wizard-logo { display:flex; align-items:center; gap:8px; }
-    .wizard-logo-mark { width:36px; height:36px; background:var(--navy); border-radius:8px; display:flex; align-items:center; justify-content:center; }
-    .wizard-logo-text { font-weight:800; font-size:18px; letter-spacing:2px; color:var(--navy); text-transform:uppercase; }
-    .wizard-progress-wrap { flex:1; max-width:200px; margin-left:auto; }
-    .wizard-progress-label { font-size:12px; color:var(--navy-mid); text-align:right; margin-bottom:6px; }
-    .wizard-progress-bar { height:4px; background:var(--navy-light); border-radius:2px; overflow:hidden; }
-    .wizard-progress-fill { height:100%; background:var(--navy); border-radius:2px; transition:width .3s ease; }
-    .wizard-card { width:100%; max-width:640px; background:#fff; border-radius:16px; padding:40px; box-shadow:0 2px 20px rgba(1,41,57,.08); }
-    .wizard-step-label { font-size:12px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--navy-mid); margin-bottom:12px; }
-    .wizard-q { font-size:26px; font-weight:800; color:var(--navy); line-height:1.2; margin-bottom:8px; }
-    .wizard-sub { font-size:15px; color:var(--navy-mid); line-height:1.5; margin-bottom:32px; }
-    .options-grid { display:grid; gap:10px; margin-bottom:32px; }
-    .options-grid.col2 { grid-template-columns:1fr 1fr; }
-    .opt-btn { padding:14px 16px; border-radius:10px; border:1.5px solid var(--navy-light); background:#fff; color:var(--navy); font-size:14px; font-weight:500; cursor:pointer; text-align:left; transition:all .15s; font-family:inherit; line-height:1.4; }
-    .opt-btn:hover { border-color:var(--navy); background:#f7f9fa; }
-    .opt-btn.selected { border-color:var(--navy); background:rgba(1,41,57,.06); font-weight:700; }
-    .opt-btn.selected::after { content:' ✓'; color:var(--navy); }
-    .goal-card { padding:20px; border-radius:12px; border:1.5px solid var(--navy-light); background:#fff; cursor:pointer; transition:all .15s; font-family:inherit; text-align:left; }
-    .goal-card:hover { border-color:var(--navy); }
-    .goal-card.selected { border-color:var(--navy); background:rgba(1,41,57,.04); }
-    .goal-card-icon { font-size:28px; margin-bottom:10px; }
-    .goal-card-title { font-size:15px; font-weight:700; color:var(--navy); margin-bottom:6px; }
-    .goal-card-desc { font-size:13px; color:var(--navy-mid); line-height:1.5; }
+    .wizard-logo-mark { width:16px; height:16px; background:var(--navy); border-radius:4px; display:flex; align-items:center; justify-content:center; }
+    .wizard-logo-mark svg { width:11px; height:11px; }
+    .wizard-logo-text { font-weight:900; font-size:14px; letter-spacing:1.4px; color:var(--navy); text-transform:uppercase; }
+    .wizard-progress-wrap { width:100%; max-width:286px; margin:0; }
+    .wizard-progress-label { display:none; }
+    .wizard-progress-bar { height:6px; background:#d9dddc; border-radius:999px; overflow:hidden; }
+    .wizard-progress-fill { height:100%; background:#2b7d23; border-radius:999px; transition:width .3s ease; }
+    .wizard-card { width:100%; max-width:520px; background:#fff; border-radius:0; padding:0 0 64px; box-shadow:none; grid-column:1; grid-row:2; }
+    .wizard-step-label { display:none; }
+    .wizard-q { font-size:28px; font-weight:900; color:var(--navy); line-height:30px; letter-spacing:-.2px; margin-bottom:12px; max-width:340px; }
+    .wizard-sub { font-size:13px; color:#424E56; line-height:18px; margin-bottom:28px; max-width:360px; }
+    .options-grid { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:32px; max-width:360px; }
+    .options-grid.col2 { display:flex; }
+    .opt-btn { min-height:36px; padding:0 16px; border-radius:999px; border:1px solid #dadfe2; background:#fff; color:var(--navy); font-size:13px; font-weight:500; cursor:pointer; text-align:left; transition:all .15s; font-family:inherit; line-height:18px; }
+    .opt-btn:hover { border-color:#2b7d23; background:#f7fbf4; }
+    .opt-btn.selected { border-color:#2b7d23; background:#eef7dc; font-weight:700; }
+    .opt-btn.selected::after { content:''; }
+    .goal-card { width:100%; padding:13px 16px; border-radius:4px; border:1px solid #dadfe2; background:#fff; cursor:pointer; transition:all .15s; font-family:inherit; text-align:left; }
+    .goal-card:hover { border-color:#2b7d23; }
+    .goal-card.selected { border-color:#2b7d23; background:#f7fbf4; }
+    .goal-card-icon { display:none; }
+    .goal-card-title { font-size:13px; font-weight:500; color:var(--navy); margin-bottom:0; line-height:18px; }
+    .goal-card-desc { display:none; }
     .secondary-goals { margin-bottom:32px; }
     .secondary-title { font-size:15px; font-weight:700; color:var(--navy); margin-bottom:14px; }
-    .secondary-opts { display:flex; flex-wrap:wrap; gap:8px; }
-    .secondary-opt { padding:8px 16px; border-radius:20px; border:1.5px solid var(--navy-light); background:#fff; color:var(--navy); font-size:13px; font-weight:500; cursor:pointer; transition:all .15s; font-family:inherit; }
-    .secondary-opt:hover { border-color:var(--navy); }
-    .secondary-opt.selected { border-color:var(--navy); background:rgba(1,41,57,.06); font-weight:700; }
+    .secondary-opts { display:flex; flex-wrap:wrap; gap:10px; max-width:360px; }
+    .secondary-opt { min-height:36px; padding:0 16px; border-radius:4px; border:1px solid #dadfe2; background:#fff; color:var(--navy); font-size:13px; font-weight:500; cursor:pointer; transition:all .15s; font-family:inherit; }
+    .secondary-opt:hover { border-color:#2b7d23; }
+    .secondary-opt.selected { border-color:#2b7d23; background:#eef7dc; font-weight:700; }
     .other-input { width:100%; padding:12px 16px; border:1.5px solid var(--navy-light); border-radius:10px; font-size:14px; font-family:inherit; color:var(--navy); outline:none; transition:border-color .15s; margin-top:12px; }
     .other-input:focus { border-color:var(--navy); }
-    .industry-search { width:100%; padding:12px 16px; border:1.5px solid var(--navy-light); border-radius:10px; font-size:14px; font-family:inherit; color:var(--navy); outline:none; margin-bottom:14px; transition:border-color .15s; }
-    .industry-search:focus { border-color:var(--navy); }
-    .industry-list { display:grid; grid-template-columns:1fr 1fr; gap:8px; max-height:320px; overflow-y:auto; }
-    .industry-item { padding:10px 14px; border:1.5px solid var(--navy-light); border-radius:8px; background:#fff; font-size:13px; font-weight:500; color:var(--navy); cursor:pointer; transition:all .15s; font-family:inherit; }
-    .industry-item:hover { border-color:var(--navy); background:#f7f9fa; }
-    .industry-item.selected { border-color:var(--navy); background:rgba(1,41,57,.06); font-weight:700; }
+    .industry-search { width:100%; max-width:500px; height:52px; padding:0 24px; border:1px solid #9eb0b7; border-radius:6px; font-size:16px; font-family:inherit; color:var(--navy); outline:none; margin-bottom:0; transition:border-color .15s, box-shadow .15s; }
+    .industry-search:focus { border-color:#d83b2a; box-shadow:0 0 0 2px rgba(216,59,42,.15); }
+    .industry-list { display:none; width:100%; max-width:500px; max-height:300px; overflow-y:auto; border:1px solid #dadfe2; border-radius:0 0 6px 6px; box-shadow:0 6px 14px rgba(1,41,57,.12); }
+    .industry-list.open { display:block; }
+    .industry-group { padding:8px 12px 6px; border-bottom:1px solid #dadfe2; color:var(--navy); font-size:14px; font-weight:800; }
+    .industry-item { display:block; width:100%; padding:9px 32px; border:0; border-radius:0; background:#fff; font-size:14px; font-weight:500; color:var(--navy); cursor:pointer; transition:background .15s; font-family:inherit; text-align:left; }
+    .industry-item:hover { background:#ebe9e3; }
+    .industry-item.selected { background:#ebe9e3; font-weight:500; }
     /* Team size number input */
-    .team-size-wrap { display:flex; flex-direction:column; align-items:center; gap:16px; margin-bottom:32px; }
-    .team-size-row { display:flex; align-items:center; gap:14px; }
+    .team-size-wrap { display:flex; flex-direction:column; align-items:flex-start; gap:16px; margin-bottom:32px; }
+    .team-size-row { display:flex; flex-wrap:wrap; align-items:center; gap:10px; max-width:360px; }
     .ts-btn { width:52px; height:52px; border-radius:50%; border:1.5px solid var(--navy-mid); background:transparent; color:var(--navy); font-size:28px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .12s; flex-shrink:0; font-family:inherit; line-height:1; }
     .ts-btn:hover:not(:disabled) { background:#f0f4f5; }
     .ts-btn:disabled { opacity:.35; cursor:not-allowed; }
@@ -154,9 +175,13 @@
     .ts-input { width:84px; height:60px; border:2px solid var(--navy); border-radius:10px; font-size:30px; font-weight:700; color:var(--navy); text-align:center; font-family:inherit; outline:none; -moz-appearance:textfield; }
     .ts-input::-webkit-outer-spin-button, .ts-input::-webkit-inner-spin-button { -webkit-appearance:none; }
     .ts-hint { font-size:13px; color:var(--navy-mid); }
-    .wz-restart-btn { display:flex; align-items:center; gap:5px; margin-left:16px; flex-shrink:0; background:none; border:1px solid var(--navy-light); border-radius:6px; padding:6px 12px; color:var(--navy-mid); font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; transition:background .15s, color .15s; white-space:nowrap; }
+    .wizard-pill-row { display:flex; flex-wrap:wrap; gap:10px; max-width:360px; margin-bottom:24px; }
+    .wizard-pill-label { width:100%; color:var(--navy); font-size:13px; font-weight:800; line-height:18px; margin-bottom:2px; }
+    .wizard-pill-label.with-gap { margin-bottom:14px; }
+    .wz-restart-btn { display:flex; align-items:center; gap:5px; flex-shrink:0; background:none; border:1px solid var(--navy-light); border-radius:6px; padding:6px 12px; color:var(--navy-mid); font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; transition:background .15s, color .15s; white-space:nowrap; }
     .wz-restart-btn:hover { background:rgba(1,41,57,.06); color:var(--navy); border-color:var(--navy-mid); }
     .wizard-nav { display:flex; align-items:center; justify-content:space-between; }
+    .wizard-restart-row { display:flex; justify-content:flex-start; margin-top:16px; }
     .btn-back-w { display:flex; align-items:center; gap:6px; background:none; border:none; cursor:pointer; color:var(--navy-mid); font-size:14px; font-weight:600; font-family:inherit; padding:0; }
     .btn-back-w:hover { color:var(--navy); }
     .btn-next-w { padding:13px 36px; border-radius:8px; background:var(--navy); color:#fff; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; transition:background .15s; }
@@ -164,6 +189,18 @@
     .btn-next-w:disabled { opacity:.4; cursor:not-allowed; }
     .btn-next-w.green { background:var(--green); color:var(--navy); }
     .btn-next-w.green:hover:not(:disabled) { background:var(--green-dark); }
+    .wizard-visual { grid-column:2; grid-row:1 / span 2; position:relative; min-height:100vh; background-color:#012939; background-image:linear-gradient(rgba(1,41,57,.18),rgba(1,41,57,.18)), var(--wizard-image); background-size:cover; background-position:center right; color:#fff; overflow:hidden; }
+    .wizard-visual::before { content:''; position:absolute; top:-4%; bottom:-4%; left:-34px; width:90px; background:#fff; clip-path:polygon(0 0,62% 0,44% 8%,70% 16%,45% 26%,68% 36%,43% 48%,70% 60%,45% 73%,66% 86%,48% 100%,0 100%); z-index:2; }
+    .wizard-visual::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(1,41,57,.05), rgba(1,41,57,.25)); opacity:.65; }
+    .wizard-visual-content { position:absolute; left:22%; right:8%; bottom:13%; z-index:3; max-width:420px; }
+    .visual-kicker { color:var(--green); font-size:16px; font-weight:900; text-transform:uppercase; margin-bottom:8px; }
+    .visual-title { color:#fff; font-size:32px; line-height:36px; font-weight:900; letter-spacing:-.3px; margin-bottom:14px; }
+    .visual-copy { color:#eef7dc; font-size:16px; line-height:23px; font-weight:700; }
+    @media (max-width: 1100px) {
+      .wizard-screen { grid-template-columns:1fr; padding:48px 28px 64px; }
+      .wizard-header, .wizard-card { max-width:560px; }
+      .wizard-visual { display:none; }
+    }
 
     /* IN-PRODUCT */
     .inproduct-shell { min-height:100vh; background:#fff; padding-left:188px; padding-top:60px; }
@@ -192,10 +229,11 @@
     .over15-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
     .over15-text { font-size:14px; color:#78350f; line-height:1.6; }
     .over15-text a { color:#78350f; font-weight:700; }
-    .ip-controls { display:flex; align-items:center; justify-content:flex-start; gap:32px; margin-bottom:32px; flex-wrap:wrap; }
-    .ip-controls .savings-pill { display:inline-flex; align-items:center; height:40px; padding:0 16px; border-radius:999px; background:#eef7dc; color:var(--navy); font-size:13px; font-weight:700; visibility:visible; }
+    .ip-controls { display:flex; align-items:center; justify-content:flex-start; column-gap:48px; row-gap:16px; margin-bottom:32px; flex-wrap:wrap; }
+    .ip-controls .savings-pill { display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 14px; border-radius:999px; background:#eef2f3; color:var(--navy); font-size:16px; font-weight:400; line-height:20.8px; visibility:visible; }
     .ip-controls .savings-pill.hidden { display:none; }
     .inproduct-shell .cards-grid { gap:24px; }
+    .ip-card-meta { margin-left:auto; color:#49646f; font-size:14px; line-height:18px; white-space:nowrap; }
     .inproduct-shell .card { position:relative; min-height:508px; border:1px solid #dadfe2; border-radius:8px; overflow:hidden; }
     .inproduct-shell .card.highlighted { border:1px solid #dadfe2; box-shadow:0 4px 16px rgba(0,0,0,.1),0 -1px 4px rgba(0,0,0,.1); }
     .inproduct-shell .card.highlighted::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 92% 10%, rgba(184,232,51,.16) 0%, rgba(184,232,51,.08) 16%, rgba(255,255,255,0) 36%); pointer-events:none; }
@@ -204,20 +242,23 @@
     .inproduct-shell .card-top { padding:24px 32px 0; }
     .inproduct-shell .card:not(.highlighted) .card-top { padding:24px 24px 0; }
     .inproduct-shell .card-name { font-size:24px; font-weight:800; line-height:32px; }
-    .inproduct-shell .badge-rec { background:#e8f5c8; color:#32821c; font-size:12px; font-weight:700; line-height:16px; padding:2px 10px; border-radius:999px; }
-    .inproduct-shell .card-users-label { display:none; }
+    .inproduct-shell .badge-rec { background:#eef2f3; color:#344f61; font-size:12px; font-weight:700; line-height:16px; padding:4px 10px; border-radius:999px; }
+    .inproduct-shell .badge-rec.green { background:#e8f5c8; color:#32821c; }
+    .inproduct-shell .card-users-label { display:block; color:var(--navy); font-size:14px; font-weight:700; line-height:18px; margin-top:4px; }
     .inproduct-shell .card-desc { color:#424E56; font-size:14px; font-weight:400; line-height:17.5px; min-height:36px; margin-top:8px; }
     .inproduct-shell .card-desc a { color:#424E56; text-decoration:underline; text-underline-offset:2px; }
     .inproduct-shell .card-price { padding:24px 32px 0; }
     .inproduct-shell .card:not(.highlighted) .card-price { padding:24px 24px 0; }
     .inproduct-shell .price-compare { color:#5d757e; font-size:16px; line-height:20px; text-decoration:line-through; text-decoration-thickness:1px; }
     .inproduct-shell .price-amount { font-size:36px; font-weight:900; line-height:40px; letter-spacing:-.36px; }
+    .inproduct-shell .price-amount.chat-copy { font-size:28px; line-height:36px; letter-spacing:0; }
     .inproduct-shell .price-mo { font-size:16px; line-height:21px; padding-bottom:4px; }
     .inproduct-shell .price-note { color:#49646f; margin-top:4px; font-size:14px; line-height:17.5px; }
     .inproduct-shell .card-cta { padding:24px 32px; order:10; margin-top:auto; }
     .inproduct-shell .card:not(.highlighted) .card-cta { padding:24px; }
     .inproduct-shell .btn-trial { height:48px; border-radius:6px; font-size:16px; font-weight:700; line-height:16px; }
     .inproduct-shell .btn-secondary-plan { width:100%; height:48px; border:1px solid #dadfe2; border-radius:6px; background:#fff; color:var(--primary-green); font-size:16px; font-weight:700; line-height:16px; font-family:inherit; cursor:pointer; }
+    .inproduct-shell .btn-contact-sales-plan { width:100%; height:48px; border:1px solid #dadfe2; border-radius:6px; background:#fff; color:var(--primary-green); font-size:16px; font-weight:700; line-height:16px; font-family:inherit; cursor:pointer; }
     .inproduct-shell .card-features { padding:16px 32px 24px; }
     .inproduct-shell .card:not(.highlighted) .card-features { padding:16px 24px 24px; }
     .inproduct-shell .features-title { color:#012939; font-size:14px; font-weight:700; line-height:17.5px; margin-bottom:10px; }
@@ -230,7 +271,18 @@
     .compare-toggle.open .compare-chevron { transform:rotate(180deg); }
     .compare-chart { display:none; margin-top:24px; border:1px solid #e0e5e8; border-radius:10px; background:#fff; overflow:hidden; }
     .compare-chart.open { display:block; }
-    .compare-chart img { display:block; width:100%; height:auto; }
+    .compare-table { width:100%; overflow-x:auto; }
+    .compare-grid { display:grid; min-width:760px; }
+    .compare-cell { min-height:56px; padding:16px 20px; border-left:1px solid #e0e5e8; color:#233d48; font-size:14px; line-height:18px; display:flex; align-items:center; justify-content:center; text-align:center; }
+    .compare-cell:first-child { border-left:0; justify-content:flex-start; text-align:left; }
+    .compare-head { min-height:116px; align-items:flex-start; flex-direction:column; gap:10px; color:var(--navy); font-size:20px; font-weight:900; }
+    .compare-head:first-child { justify-content:flex-end; }
+    .compare-feature-name { justify-content:space-between; gap:12px; font-weight:500; }
+    .compare-section-title { min-height:64px; align-items:flex-end; justify-content:flex-start; color:var(--navy); font-size:18px; font-weight:900; }
+    .compare-check { color:var(--primary-green); font-size:24px; line-height:1; }
+    .compare-dash { color:#49646f; font-weight:800; }
+    .compare-addon { color:var(--navy); font-weight:800; }
+    .compare-plan-button { width:100%; height:32px; border:1px solid #dadfe2; border-radius:6px; background:#fff; color:var(--primary-green); font-family:inherit; font-size:14px; font-weight:800; }
     .ip-section { margin-top:64px; }
     .ip-section.plus-section { margin-top:64px; background:#f9f8f6; border-radius:24px; padding:32px; }
     .ip-section h2 { margin:0 0 32px; color:var(--navy); font-size:24px; line-height:32px; font-weight:900; }
@@ -240,7 +292,7 @@
     .feature-tile-title { color:var(--navy); font-size:20px; font-weight:800; line-height:24px; margin-bottom:16px; }
     .feature-tile-copy { color:#424E56; font-size:14px; line-height:18px; }
     .plus-feature-card { overflow:hidden; border-radius:8px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.1),0 4px 12px rgba(0,0,0,.05); }
-    .plus-feature-visual { height:350px; background:#fff; padding:16px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .plus-feature-visual { height:350px; background:#fff; padding:0; display:flex; align-items:center; justify-content:center; overflow:hidden; }
     .plus-feature-visual img { width:100%; height:100%; object-fit:cover; border-radius:4px; }
     .plus-feature-body { min-height:140px; padding:24px; }
     .plus-feature-title { display:flex; align-items:center; gap:8px; color:var(--navy); font-size:20px; font-weight:800; line-height:24px; margin-bottom:8px; }
@@ -271,7 +323,7 @@
 <!-- ═══════════ SCREEN 1: PUBLIC PRICING ═══════════ -->
 <div id="screen-pricing" class="screen active">
   <div class="hero">
-    <p class="hero-title">Try Jobber for free now. Pick a plan later.</p>
+    <p class="hero-title">Try Jobber for free now</p>
     <p class="hero-sub">Put Jobber to work. No credit card required.</p>
   </div>
   <div class="hero-rip"></div>
@@ -286,7 +338,7 @@
           <button class="team-size-option" type="button" data-users="15">15</button>
           </div>
       </div>
-      <div class="control-group">
+      <div class="control-group billing-group">
         <span class="control-label">Billing</span>
         <div class="billing-wrapper" id="p1-bwrap">
           <div class="billing-toggle">
@@ -302,7 +354,10 @@
           </div>
         </div>
       </div>
-      <span class="savings-pill" id="p1-savings">Save up to <span class="hl">25%</span> with annual billing</span>
+      <span class="savings-pill" id="p1-savings">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5V12L12 20L20 12L13.5 5.5H4Z" stroke="#012939" stroke-width="2" stroke-linejoin="round"/><circle cx="10" cy="10" r="1.6" fill="#012939"/></svg>
+        <span>Best value</span>
+      </span>
     </div>
 
     <div class="cards-grid" id="p1-cards-grid">
@@ -310,7 +365,7 @@
       <div class="card" id="p1-card-plus">
         <div class="card-top">
           <div class="card-name-row"><div class="card-name">Plus</div><span class="badge-rec" id="p1-badge-plus" style="display:none">Recommended</span></div>
-          <div class="card-users-label" id="p1-plus-users">Includes 5 users</div>
+          <div class="card-users-row"><div class="card-users-label" id="p1-plus-users">Includes 5 users</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are team members who log into Jobber. Extra users are $29/mo each. Need 16+? <a href="#">Contact us</a></span></span></div>
           <div class="card-desc">All features backed by premium support to maximize efficiency and profits.</div>
         </div>
         <div class="card-price">
@@ -318,8 +373,11 @@
           <div class="price-note" id="p1-plus-note">Billed annually</div>
         </div>
         <div class="card-cta" id="p1-plus-cta">
-          <button class="btn-trial" onclick="goToWizard()">Try Jobber For Free</button>
-          <div class="cta-spacer"></div>
+          <button class="btn-contact">Contact Sales</button>
+          <a class="why-link" href="#" aria-label="Why Plus?">
+            <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M7.25 5.75L12 9L7.25 12.25V5.75Z" fill="currentColor"/></svg>
+            <span>Why Plus?</span>
+          </a>
         </div>
         <div class="card-features">
           <div class="features-title">All Grow features, plus:</div>
@@ -335,7 +393,7 @@
       <div class="card" id="p1-card-grow">
         <div class="card-top">
           <div class="card-name-row"><div class="card-name">Grow</div><span class="badge-rec" id="p1-badge-grow" style="display:none">Recommended</span></div>
-          <div class="card-users-label" id="p1-grow-users">Includes 1 user</div>
+          <div class="card-users-row"><div class="card-users-label" id="p1-grow-users">Includes 1 user</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are team members who log into Jobber. Extra users are $29/mo each. Need 16+? <a href="#">Contact us</a></span></span></div>
           <div class="card-desc">Advanced tools to win bigger jobs, scale your operations, and take back your admin time.</div>
         </div>
         <div class="card-price">
@@ -360,7 +418,7 @@
       <div class="card" id="p1-card-connect">
         <div class="card-top">
           <div class="card-name-row"><div class="card-name">Connect</div><span class="badge-rec" id="p1-badge-connect">Recommended</span></div>
-          <div class="card-users-label" id="p1-connect-users">Includes 1 user</div>
+          <div class="card-users-row"><div class="card-users-label" id="p1-connect-users">Includes 1 user</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are team members who log into Jobber. Extra users are $29/mo each. Need 16+? <a href="#">Contact us</a></span></span></div>
           <div class="card-desc">Automations and must-have integrations to reduce admin work and impress customers.</div>
         </div>
         <div class="card-price">
@@ -428,12 +486,11 @@
         <div class="wizard-progress-label" id="wz-step-label">Step 1 of 5</div>
         <div class="wizard-progress-bar"><div class="wizard-progress-fill" id="wz-progress" style="width:20%"></div></div>
       </div>
-      <button class="wz-restart-btn" onclick="restartFlow()" title="Start over">
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5a4.5 4.5 0 1 1 1.1 2.95" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 9.5V6.5H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Start over
-      </button>
     </div>
     <div class="wizard-card" id="wizard-card"></div>
+    <aside class="wizard-visual" id="wizard-visual" aria-hidden="true">
+      <div class="wizard-visual-content" id="wizard-visual-content"></div>
+    </aside>
   </div>
 </div>
 
@@ -496,7 +553,7 @@
             <button class="team-size-option" type="button" data-users="15">15</button>
               </div>
         </div>
-        <div class="control-group">
+        <div class="control-group billing-group">
           <span class="control-label">Billing</span>
           <div class="billing-wrapper" id="ip-bwrap">
             <div class="billing-toggle">
@@ -512,7 +569,11 @@
             </div>
           </div>
         </div>
-        <span class="savings-pill" id="ip-savings">Save up to <span class="hl">25%</span> with annual billing</span>
+        <span class="savings-pill" id="ip-savings">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5V12L12 20L20 12L13.5 5.5H4Z" stroke="#012939" stroke-width="2" stroke-linejoin="round"/><circle cx="10" cy="10" r="1.6" fill="#012939"/></svg>
+          <span>Best value</span>
+        </span>
+        <div class="ip-card-meta">Prices in $USD</div>
       </div>
       <div style="display:flex;gap:8px;margin-bottom:6px;" id="ip-badge-row"></div>
       <div class="cards-grid" id="ip-cards-grid"></div>
@@ -521,7 +582,7 @@
         <span class="compare-chevron" aria-hidden="true">⌄</span>
       </button>
       <div class="compare-chart" id="compare-chart">
-        <img src="compare-all-features-chart.png" alt="Comparison chart for Plus, Grow, Connect, and Core plan features">
+        <div class="compare-table" id="compare-table" aria-label="Plan feature comparison"></div>
       </div>
 
       <section class="ip-section core-section">
@@ -539,9 +600,9 @@
       <section class="ip-section plus-section">
         <h2>Supercharge your business with these add-ons</h2>
         <div class="feature-tile-grid">
-          <div class="plus-feature-card"><div class="plus-feature-visual"><img src="https://www.figma.com/api/mcp/asset/c883254a-20ec-4ce4-8e75-e34c92acff01" alt="Marketing Suite preview"></div><div class="plus-feature-body"><div class="plus-feature-title">Marketing Suite <span>→</span></div><div class="plus-feature-copy">Provides you with effective tools to win more work, grow your revenue, increase your client base, and build client loyalty</div></div></div>
-          <div class="plus-feature-card"><div class="plus-feature-visual"><img src="https://www.figma.com/api/mcp/asset/7d5258b0-418f-4e6a-95b1-5e5cf40e350c" alt="Receptionist preview"></div><div class="plus-feature-body"><div class="plus-feature-title">Receptionist <span>→</span></div><div class="plus-feature-copy">Round-the-clock service by phone or text.</div></div></div>
-          <div class="plus-feature-card"><div class="plus-feature-visual"><img src="https://www.figma.com/api/mcp/asset/621f48a2-7b11-4213-8bc4-9c4becc02910" alt="Pipeline preview"></div><div class="plus-feature-body"><div class="plus-feature-title">Pipeline <span>→</span></div><div class="plus-feature-copy">All your opportunities, all in one place</div></div></div>
+          <div class="plus-feature-card"><div class="plus-feature-visual"><img src="addon-marketing-suite.png" alt="Marketing Suite preview"></div><div class="plus-feature-body"><div class="plus-feature-title">Marketing Suite <span>→</span></div><div class="plus-feature-copy">Provides you with effective tools to win more work, grow your revenue, increase your client base, and build client loyalty</div></div></div>
+          <div class="plus-feature-card"><div class="plus-feature-visual"><img src="addon-receptionist.png" alt="Receptionist preview"></div><div class="plus-feature-body"><div class="plus-feature-title">Receptionist <span>→</span></div><div class="plus-feature-copy">Round-the-clock service by phone or text.</div></div></div>
+          <div class="plus-feature-card"><div class="plus-feature-visual"><img src="addon-pipeline.png" alt="Pipeline preview"></div><div class="plus-feature-body"><div class="plus-feature-title">Pipeline <span>→</span></div><div class="plus-feature-copy">All your opportunities, all in one place</div></div></div>
         </div>
       </section>
 
@@ -611,8 +672,14 @@ function billingLabel(b) {
   return b === 'annual' ? 'Billed annually' : b === 'acbm' ? '1 year commitment' : 'Billed monthly';
 }
 function savingsHTML(b) {
-  return b === 'annual' ? 'Save up to <span class="hl">25%</span> with annual billing'
-       : b === 'acbm'   ? 'Save up to <span class="hl">15%</span>' : '';
+  return b === 'annual'
+    ? '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5V12L12 20L20 12L13.5 5.5H4Z" stroke="#012939" stroke-width="2" stroke-linejoin="round"/><circle cx="10" cy="10" r="1.6" fill="#012939"/></svg><span>Best value</span>'
+    : '';
+}
+function marketingSavingsHTML(b) {
+  return b === 'annual'
+    ? '<span class="promo-strong">Save up to 25%</span><span> with annual billing</span>'
+    : '';
 }
 function anim(el, txt) {
   el.classList.add('animating');
@@ -621,7 +688,7 @@ function anim(el, txt) {
 
 const CONTACT_CTA = `<button class="btn-contact">Contact Sales</button><div class="cta-spacer"></div>`;
 const TRIAL_CTA   = `<button class="btn-trial" onclick="goToWizard()">Try Jobber For Free</button><div class="cta-spacer"></div>`;
-const PLUS_CTA    = `<button class="btn-trial" onclick="goToWizard()">Try Jobber For Free</button><div class="cta-spacer"></div>`;
+const PLUS_CTA    = `<button class="btn-contact">Contact Sales</button><a class="why-link" href="#" aria-label="Why Plus?"><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M7.25 5.75L12 9L7.25 12.25V5.75Z" fill="currentColor"/></svg><span>Why Plus?</span></a>`;
 
 // ═══════════════════════════════════════════════════
 // SCREEN 1
@@ -647,7 +714,7 @@ function p1Update() {
   document.getElementById('p1-dd2').classList.toggle('selected', p1MT === 'monthly');
   document.getElementById('p1-mlabel').textContent = (p1B !== 'annual' && p1MT === 'acbm') ? 'Monthly for 1 yr' : 'Monthly';
   const sv = document.getElementById('p1-savings');
-  sv.innerHTML = savingsHTML(p1B); sv.classList.toggle('hidden', !savingsHTML(p1B));
+  sv.innerHTML = marketingSavingsHTML(p1B); sv.classList.toggle('hidden', !marketingSavingsHTML(p1B));
 
   document.getElementById('p1-cards-grid').classList.toggle('three-cards', u === 1 || u >= 5);
   document.getElementById('p1-card-plus').style.display = u === 1 ? 'none' : '';
@@ -666,7 +733,7 @@ function p1Update() {
     anim(document.getElementById('p1-plus-price'), "Let's Chat");
     document.getElementById('p1-plus-mo').style.display = 'none';
     document.getElementById('p1-plus-note').textContent = '';
-    document.getElementById('p1-plus-cta').innerHTML = CONTACT_CTA;
+    document.getElementById('p1-plus-cta').innerHTML = PLUS_CTA;
   } else {
     anim(document.getElementById('p1-plus-price'), '$'+getPrice('plus',u,p1B,false));
     document.getElementById('p1-plus-mo').style.display = '';
@@ -787,6 +854,20 @@ const PG = [
 const INDS = ['Bin Cleaning','Carpet Cleaning','Commercial Cleaning','Pressure Washing Service','Residential Cleaning','Window Washing','Arborist / Tree Care','Landscaping Contractor','Lawn Care & Lawn Maintenance','Computers & IT','Home Theater','Security and Alarm','Construction & Contracting','Electrical Contractor','HVAC','Locksmith','Mechanical Service','Plumbing','Appliance Repair','Flooring Service','Handyman','Junk Removal','Painting','Pest Control','Pool and Spa Service','Renovations','Roofing Service','Snow Removal','Other'];
 const REVS = ['$0 - $50,000','$50,000 - $150,000','$150,000 - $500,000','$500,000 - $2,000,000','$2,000,000+',"I'd prefer not to say"];
 const YRS  = ['<1 year','1-2 years','3-5 years','6-10 years','10+ years'];
+const IND_GROUPS = [
+  {label:'Cleaning', items:['Bin Cleaning','Carpet Cleaning','Commercial Cleaning','Pressure Washing Service','Residential Cleaning','Window Washing']},
+  {label:'Green Industry', items:['Arborist / Tree Care','Landscaping Contractor','Lawn Care & Lawn Maintenance','Snow Removal']},
+  {label:'Contracting', items:['Construction & Contracting','Electrical Contractor','HVAC','Locksmith','Mechanical Service','Plumbing','Renovations','Roofing Service']},
+  {label:'Home Services', items:['Appliance Repair','Flooring Service','Handyman','Junk Removal','Painting','Pest Control','Pool and Spa Service','Other']},
+  {label:'Technology', items:['Computers & IT','Home Theater','Security and Alarm']},
+];
+const WIZARD_VISUALS = [
+  {img:'onboarding-step-1.png', k:'DID YOU KNOW...', t:'Businesses grow their revenue by 37% on average with Jobber.', c:'Tell us about your business so Jobber can tailor your setup.'},
+  {img:'onboarding-step-2.png', k:'DID YOU KNOW...', t:'Business owners who use Jobber save 7 hours a week.', c:'A few quick details help us suggest the right tools and workflows.'},
+  {img:'onboarding-step-3.png', k:'DID YOU KNOW...', t:'You can get paid 4x faster with Jobber’s online payments.', c:'Revenue helps us fine-tune the subscription recommendation.'},
+  {img:'onboarding-step-4.png', k:'QUOTE', t:'Jobber helps make our recurring customers feel like VIPs.', c:'Choose the outcome that matters most so your setup feels useful from day one.'},
+  {img:'onboarding-step-5.png', k:'WE’RE HERE TO HELP', t:'Your business run smoothly.', c:'Built-in reporting, client management, scheduling, and automations all in one place.'},
+];
 
 let wzStep = 1;
 const WZ_TOTAL = 5;
@@ -841,10 +922,31 @@ function recCopy(rec) {
 
 let wzStep2Local = 1; // track team size locally during step 2
 
+function industryListHTML() {
+  return IND_GROUPS.map(group => `
+    <div class="industry-group">${group.label}</div>
+    ${group.items.map(i => `<button class="industry-item${WA.industry===i?' selected':''}" onclick="pickInd('${i.replace(/'/g,"\\'")}')">${i}</button>`).join('')}
+  `).join('');
+}
+
+function wizardPill(label, value, selected, handler) {
+  return `<button class="opt-btn${selected?' selected':''}" onclick="${handler}('${String(value).replace(/'/g,"\\'")}')">${label}</button>`;
+}
+
+function updateWizardVisual() {
+  const target = document.getElementById('wizard-visual-content');
+  const panel = document.getElementById('wizard-visual');
+  if (!target) return;
+  const visual = WIZARD_VISUALS[wzStep - 1] || WIZARD_VISUALS[0];
+  if (panel) panel.style.setProperty('--wizard-image', `url('${visual.img}')`);
+  target.innerHTML = `<div class="visual-kicker">${visual.k}</div><div class="visual-title">${visual.t}</div><div class="visual-copy">${visual.c}</div>`;
+}
+
 function renderWZ(instant) {
   const card = document.getElementById('wizard-card');
   document.getElementById('wz-progress').style.width = Math.round(wzStep/WZ_TOTAL*100)+'%';
   document.getElementById('wz-step-label').textContent = `Step ${wzStep} of ${WZ_TOTAL}`;
+  updateWizardVisual();
 
   const doRender = () => {
 
@@ -852,48 +954,43 @@ function renderWZ(instant) {
 
   if (wzStep === 1) {
     h += `<div class="wizard-step-label">Step 1 of 5 — Industry</div>
-      <div class="wizard-q">What type of home service business do you run?</div>
-      <div class="wizard-sub">We'll use this to tailor your experience and recommend the right tools.</div>
-      <input type="text" class="industry-search" placeholder="Search industries…" oninput="filterInds(this.value)">
+      <div class="wizard-q">Tell us about your business</div>
+      <div class="wizard-sub">Understanding your business helps us tailor Jobber to your needs. View our privacy policy.</div>
+      <input type="text" class="industry-search" placeholder="Search for your industry" onfocus="openIndustryDropdown()" onclick="openIndustryDropdown()" oninput="filterInds(this.value)">
       <div class="industry-list" id="ind-list">
-        ${INDS.map(i=>`<button class="industry-item${WA.industry===i?' selected':''}" onclick="pickInd('${i.replace(/'/g,"\\'")}')"> ${i} </button>`).join('')}
+        ${industryListHTML()}
       </div><div style="margin-top:24px"></div>`;
 
   } else if (wzStep === 2) {
     const n = WA.empCount;
-    h += `<div class="wizard-step-label">Step 2 of 5 — Team size</div>
-      <div class="wizard-q">How many people work at your company?</div>
-      <div class="wizard-sub">Include yourself in the count. Enter an exact number — we'll find the right fit.</div>
+    h += `<div class="wizard-step-label">Step 2 of 5 — Business profile</div>
+      <div class="wizard-q">Your ${(WA.industry || 'business').toLowerCase()} business at a glance</div>
+      <div class="wizard-sub">We use this information to suggest the right tools and workflows for your team.</div>
       <div class="team-size-wrap">
-        <div class="team-size-row">
-          <button class="ts-btn" onclick="adjTeam(-1)" ${n<=1?'disabled':''}>−</button>
-          <input type="number" class="ts-input" id="ts-inp" value="${n}" min="1" oninput="setTeam(this.value)" onblur="blurTeam(this.value)">
-          <button class="ts-btn inc" onclick="adjTeam(1)">+</button>
+        <div class="wizard-pill-row">
+          <div class="wizard-pill-label">How many people work at your company (including you)?</div>
+          ${[[1,'Just me'],[3,'2-5 people'],[8,'6-10 people'],[15,'11-15 people'],[20,'20+ people']].map(([v,label]) => `<button class="opt-btn${(v===1?n===1:v===20?n>=20:n>=(v===3?2:v===8?6:11)&&n<=(v===3?5:v===8?10:15))?' selected':''}" onclick="setTeamRange(${v})">${label}</button>`).join('')}
         </div>
-        <div class="ts-hint">${n===1?'Just you — that works!':`${n} ${n===1?'person':'people'} including you`}</div>
+        <div class="wizard-pill-row">
+          <div class="wizard-pill-label">How many years have you been in business?</div>
+          ${YRS.map(o=>wizardPill(o,o,WA.years===o,'pickYr')).join('')}
+        </div>
       </div>`;
 
   } else if (wzStep === 3) {
     h += `<div class="wizard-step-label">Step 3 of 5 — Revenue</div>
-      <div class="wizard-q">What is your annual business revenue?</div>
-      <div class="wizard-sub">Your answers stay private and help us point you in the right direction.</div>
+      <div class="wizard-q">Let's fine-tune your Jobber experience</div>
+      <div class="wizard-sub">We use this to ensure the tools within scheduling, invoicing, and client management fit your business needs.</div>
+      <div class="wizard-pill-label with-gap">What’s your estimated revenue for this year?</div>
       <div class="options-grid">
-        ${REVS.map(o=>`<button class="opt-btn${WA.revenue===o?' selected':''}" onclick="pickRev('${o.replace(/'/g,"\\'")}')"> ${o} </button>`).join('')}
+        ${REVS.map(o=>wizardPill(o,o,WA.revenue===o,'pickRev')).join('')}
       </div>`;
 
   } else if (wzStep === 4) {
-    h += `<div class="wizard-step-label">Step 4 of 5 — Experience</div>
-      <div class="wizard-q">How long have you been in business?</div>
-      <div class="wizard-sub">Whether you're brand new or well-established, we have the right tools.</div>
-      <div class="options-grid col2">
-        ${YRS.map(o=>`<button class="opt-btn${WA.years===o?' selected':''}" onclick="pickYr('${o}')"> ${o} </button>`).join('')}
-      </div>`;
-
-  } else if (wzStep === 5) {
-    h += `<div class="wizard-step-label">Step 5 of 5 — Goals</div>
-      <div class="wizard-q">What's your biggest priority right now?</div>
-      <div class="wizard-sub">Pick the one that fits best — you can always focus on others later.</div>
-      <div class="options-grid" style="grid-template-columns:1fr 1fr;margin-bottom:24px;">
+    h += `<div class="wizard-step-label">Step 4 of 5 — Goals</div>
+      <div class="wizard-q">${(WA.industry || 'Your business').split(' ')[0]}, let's get Jobber working for you</div>
+      <div class="wizard-sub">Tell us what’s top of mind so we can tailor Jobber to your needs.</div>
+      <div class="options-grid" style="flex-direction:column;margin-bottom:24px;">
         ${PG.map(g=>`<button class="goal-card${WA.primaryGoal===g.title?' selected':''}" onclick="pickPG('${g.title.replace(/'/g,"\\'")}')">
           <div class="goal-card-icon">${g.icon}</div>
           <div class="goal-card-title">${g.title}</div>
@@ -911,12 +1008,29 @@ function renderWZ(instant) {
         ${showOtherInput ? `<input type="text" class="other-input" placeholder="Tell us what you're looking for…" value="${WA.otherGoal}" oninput="WA.otherGoal=this.value">` : ''}
       </div>`;
     }
+  } else if (wzStep === 5) {
+    h += `<div class="wizard-step-label">Step 5 of 5 — Focus</div>
+      <div class="wizard-q">Let's build the professional image you deserve</div>
+      <div class="wizard-sub">We know making your business look as good as your work can be tough. That's why we're built to help you look professional in no time.</div>
+      <div class="secondary-goals">
+        <div class="secondary-title">Tell us what you'd like to focus on <span style="font-weight:400;color:var(--navy-mid)">(optional)</span></div>
+        <div class="secondary-opts">
+          ${(WA.primaryGoal ? PG_SEC[WA.primaryGoal] || [] : PG_SEC[PG[0].title]).map(s=>`<button class="secondary-opt${WA.secondaryGoals.includes(s)?' selected':''}" onclick="togSG('${s.replace(/'/g,"\\'")}')"> ${s} </button>`).join('')}
+        </div>
+      </div>`;
   }
 
-  const canNext = (wzStep===1&&WA.industry)||(wzStep===2&&WA.empCount>=1)||(wzStep===3&&WA.revenue)||(wzStep===4&&WA.years)||(wzStep===5&&WA.primaryGoal);
+  const canNext = (wzStep===1&&WA.industry)||(wzStep===2&&WA.empCount>=1&&WA.years)||(wzStep===3&&WA.revenue)||(wzStep===4&&WA.primaryGoal)||(wzStep===5);
   h += `<div class="wizard-nav" style="margin-top:8px;">
+    ${wzStep > 1 ? '<button class="btn-back-w" onclick="wzBack()">Back</button>' : '<span></span>'}
     <button class="btn-next-w${wzStep===WZ_TOTAL?' green':''}" ${canNext?'':'disabled'} onclick="wzNext()">
-      ${wzStep===WZ_TOTAL?'✨ See my plan':'Continue →'}
+      ${wzStep===WZ_TOTAL?'See my plan':'Next ›'}
+    </button>
+  </div>
+  <div class="wizard-restart-row">
+    <button class="wz-restart-btn" onclick="restartFlow()" title="Start over">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5a4.5 4.5 0 1 1 1.1 2.95" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 9.5V6.5H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Start over
     </button>
   </div></div>`;
 
@@ -937,16 +1051,26 @@ function renderWZ(instant) {
 }
 
 function filterInds(q) {
+  openIndustryDropdown();
   document.querySelectorAll('.industry-item').forEach(el => {
     el.style.display = el.textContent.trim().toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
   });
 }
+function openIndustryDropdown() {
+  const list = document.getElementById('ind-list');
+  if (list) list.classList.add('open');
+}
+function closeIndustryDropdown() {
+  const list = document.getElementById('ind-list');
+  if (list) list.classList.remove('open');
+}
 function pickInd(v) { WA.industry=v; renderWZ(true); setTimeout(()=>{ if(WA.industry)wzNext(); },220); }
 function adjTeam(d)    { WA.empCount=Math.max(1,(WA.empCount||1)+d); renderWZ(true); }
 function setTeam(v)    { const n=parseInt(v,10); if(!isNaN(n)&&n>=1) WA.empCount=n; }
+function setTeamRange(v) { WA.empCount=parseInt(v,10)||1; renderWZ(true); }
 function blurTeam(v)   { WA.empCount=Math.max(1,parseInt(v,10)||1); renderWZ(true); }
 function pickRev(v)    { WA.revenue=v; renderWZ(true); setTimeout(()=>wzNext(),220); }
-function pickYr(v)     { WA.years=v;   renderWZ(true); setTimeout(()=>wzNext(),220); }
+function pickYr(v)     { WA.years=v;   renderWZ(true); }
 function pickPG(v)     { WA.primaryGoal=v; WA.secondaryGoals=[]; renderWZ(true); }
 function togSG(v)      { const i=WA.secondaryGoals.indexOf(v); if(i>=0)WA.secondaryGoals.splice(i,1); else WA.secondaryGoals.push(v); renderWZ(true); }
 function wzNext()      { if(wzStep<WZ_TOTAL){wzStep++;renderWZ();}else{goToIP();} }
@@ -956,50 +1080,89 @@ function wzBack()      { if(wzStep>1){wzStep--;renderWZ();}else{showScreen('pric
 // SCREEN 3 (IN-PRODUCT)
 // ═══════════════════════════════════════════════════
 let ipN=1, ipB='annual', ipMT='acbm', ipDD=false, ipRec='connect', ipReady=false;
-const IP_TEAM_PRESETS = [1, 5, 10, 15];
+const IP_TEAM_PRESETS = [1, 5, 10, 15, 16];
 
 function syncIPTeamOptions(users) {
   const control = document.querySelector('[data-team-control="ip"]');
   if (!control) return;
 
-  const options = [...IP_TEAM_PRESETS];
-  if (!options.includes(users)) options.push(users);
-  options.sort((a, b) => a - b);
-
-  control.innerHTML = options.map(n => (
-    `<button class="team-size-option" type="button" data-users="${n}">${n}</button>`
+  control.innerHTML = IP_TEAM_PRESETS.map(n => (
+    `<button class="team-size-option" type="button" data-users="${n}">${n === 16 ? '16+' : n}</button>`
   )).join('');
+}
+
+function purchasableTeamSize(users) {
+  const requestedSeats = Math.max(1, users || 1);
+  return IP_TEAM_PRESETS.find(size => requestedSeats <= size) || 16;
 }
 
 const CKSV = `<svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
 const CF = {
-  plus:    {t:'Includes ALL of Jobber’s features', i:['Marketing Suite','Premium Support','AI Receptionist <span class="beta-label">Beta</span>','Onboarding coach','Data import']},
-  grow:    {t:'All Connect features, plus', i:['Quote add-ons and images','Track costs with job costing','Automated quote follow-ups','Two-way text messaging','Automatic location timers']},
-  connect: {t:'All Core features, plus',   i:['Send automated reminders','Document work on job forms','Automate invoice follow-ups','Connect Quickbooks Online','Start tracking time and expenses']},
+  plus:    {t:"Includes ALL of Jobber's features", i:['Jobber Marketing Suite ($79 value)','Jobber Receptionist ($99 value)','Jobber Pipeline ($49 value)','Onboarding with a dedicated specialist','Premium Support ($99 value)','Guided API tour for custom integrations']},
+  grow:    {t:'All Connect and Core features, plus', i:['Advanced quote customization','Add optional line items','Track time automatically','Track costs with job costing','Connect with clients through two-way SMS','Build custom workflow automations']},
+  connect: {t:'All Core features, plus',   i:['Send automated reminders','Collect payments automatically','Document work with checklists','Automate quote and invoice follow-ups','Connect QuickBooks Online','Track time and expenses']},
   core:    {t:'Key features',              i:['Book and schedule jobs online','Send professional quotes','Send invoices and receive online payments','Create a professional website','Reporting']},
 };
 const CD = {
-  plus:'All features at the best price with premium support to maximize efficiency. <a href="#">Learn more</a>',
-  grow:'Advanced tools to win bigger jobs, and efficiently manage your full schedule.',
+  plus:'All features, backed with premium support to maximize operational efficiency and profits. <a href="#">Learn more</a>',
+  grow:'Advanced tools to win bigger jobs, scale efficiently, and take back your admin time.',
   connect:'Automations and must-have integrations to reduce admin work and impress customers.',
   core:'Essential tools to grow your reputation as a professional home service business.',
 };
+const COMPARE_SECTIONS = [
+  { title:'Customer management', rows:[
+    ['Client manager (CRM)', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Client hub', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Requests', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Online booking', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Automatic client notifications', {plus:'yes', grow:'yes', connect:'yes', core:'no'}],
+    ['Two-way text messaging', {plus:'yes', grow:'yes', connect:'no', core:'no'}],
+    ['Lead management', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Custom automation builder', {plus:'yes', grow:'yes', connect:'no', core:'no'}],
+    ['Receptionist', {plus:'yes', grow:'Add-on', connect:'Add-on', core:'Add-on'}],
+    ['Pipeline (beta)', {plus:'yes', grow:'no', connect:'no', core:'no'}],
+  ]},
+  { title:'Marketing Tools', rows:[
+    ['Marketing dashboard', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Website', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Marketing Suite', {plus:'yes', grow:'Add-on', connect:'Add-on', core:'Add-on'}],
+  ]},
+  { title:'Job Tracking', rows:[
+    ['Scheduling', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Job details and attachments', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Checklists', {plus:'yes', grow:'yes', connect:'yes', core:'no'}],
+  ]},
+];
 
-const billingSuffix = b => b === 'annual' ? 'billed annually' : b === 'acbm' ? '1 year commitment' : 'billed monthly';
+const billingSuffix = b => b === 'annual' ? 'billed annually' : b === 'acbm' ? 'billed monthly' : 'billed monthly';
+const billingPriceNote = b => b === 'annual' ? 'for 12 months billed annually' : b === 'acbm' ? 'for 12 months billed monthly' : 'billed monthly';
 function seatBillingLabel(plan, users, billing) {
   if (plan === 'core') return `1 seat · ${billingSuffix(billing)}`;
-  const seats = plan === 'plus' ? Math.max(Math.min(users, 15), 5) : Math.min(users, 15);
-  return `${seats} ${seats === 1 ? 'seat' : 'seats'} · ${billingSuffix(billing)}`;
+  const seats = plan === 'plus' ? Math.max(users, 5) : users;
+  return `${seats >= 16 ? '16+' : seats} ${seats === 1 ? 'seat' : 'seats'} · ${billingSuffix(billing)}`;
+}
+
+function planSeatLabel(plan, users) {
+  if (users >= 16) return 'At least 16 seats';
+  if (plan === 'plus') return `${Math.max(users, 5)} users`;
+  if (plan === 'grow') return `${users >= 10 ? 10 : users >= 5 ? 5 : 1} ${users === 1 ? 'user' : 'users'}`;
+  if (plan === 'connect') return `${users >= 5 ? 5 : 1} ${users === 1 ? 'user' : 'users'}`;
+  return '1 user';
+}
+
+function planBadgeHTML(plan) {
+  if (plan === 'connect') return '<span class="badge-rec green">Most Popular</span>';
+  return '';
 }
 
 function ipCardHTML(plan, users, billing, isHL) {
-  const cu = Math.min(users, 15); // cap at 15 for pricing
-  const price = plan==='core' ? getPrice('core',1,billing,true) : getPrice(plan,cu,billing,true);
-  const comparePrice = plan==='core' || billing === 'monthly' ? null : getPrice(plan,cu,'monthly',true);
-  const plusU = Math.max(cu, 5);
-  const ul = plan==='core' ? 'For 1 user'
-           : plan==='plus' ? (plusU===1?'Includes 1 user':`Includes ${plusU} users`)
-           : (cu<=1?'Includes 1 user':`Includes ${cu} users`);
+  const contactSales = users >= 16;
+  const priceUsers = contactSales ? 16 : users;
+  const price = contactSales ? null : plan==='core' ? getPrice('core',1,billing,true) : getPrice(plan,priceUsers,billing,false);
+  const comparePrice = contactSales || plan==='core' || billing === 'monthly' ? null : getPrice(plan,priceUsers,'monthly',false);
+  const ul = users >= 16 ? 'At least 16 seats'
+           : plan==='core' ? 'For 1 user'
+           : planSeatLabel(plan, users);
   const f = CF[plan];
   const pn = plan.charAt(0).toUpperCase()+plan.slice(1);
   const grey = (plan==='core'&&users>1)?' greyed':'';
@@ -1007,26 +1170,56 @@ function ipCardHTML(plan, users, billing, isHL) {
 
   return `<div class="card${grey}${hl}">
     <div class="card-top">
-      <div class="card-name-row"><div class="card-name">${pn}</div>${isHL?'<span class="badge-rec">Recommended</span>':''}</div>
+      <div class="card-name-row"><div class="card-name">${pn}</div>${planBadgeHTML(plan)}</div>
       <div class="card-users-label">${ul}</div>
       <div class="card-desc">${CD[plan]}</div>
     </div>
     <div class="card-price">
       ${comparePrice ? `<div class="price-compare">$${comparePrice}/mo</div>` : ''}
-      <div class="price-row"><span class="price-amount">${price!==null?'$'+price:'—'}</span><span class="price-mo">/mo</span></div>
-      <div class="price-note">${seatBillingLabel(plan, users, billing)}</div>
+      <div class="price-row"><span class="price-amount${contactSales?' chat-copy':''}">${contactSales ? "Let's chat" : '$'+price}</span>${contactSales ? '' : '<span class="price-mo">/mo</span>'}</div>
+      <div class="price-note">${contactSales ? 'Contact sales for custom pricing' : billingPriceNote(billing)}</div>
     </div>
     <div class="card-features">
       <div class="features-title">${f.t}</div>
       ${f.i.map(x=>`<div class="feature">${CKSV}${x}</div>`).join('')}
     </div>
     <div class="card-cta">
-      ${isHL
+      ${contactSales
+        ? (plan === 'plus' ? `<button class="btn-trial">Contact Sales</button>` : `<button class="btn-contact-sales-plan">Contact Sales</button>`)
+        : plan === 'plus' || isHL
         ? `<button class="btn-trial">Choose Plan</button>`
         : `<button class="btn-secondary-plan">Choose Plan</button>`
       }
     </div>
   </div>`;
+}
+
+function compareValueHTML(value) {
+  if (value === 'yes') return '<span class="compare-check">✓</span>';
+  if (value === 'Add-on') return '<span class="compare-addon">Add-on</span>';
+  return '<span class="compare-dash">-</span>';
+}
+
+function renderCompareTable(plans) {
+  const table = document.getElementById('compare-table');
+  if (!table) return;
+  const columns = ['features', ...plans];
+  const planName = plan => plan.charAt(0).toUpperCase() + plan.slice(1);
+  let html = `<div class="compare-grid" style="grid-template-columns:1.15fr repeat(${plans.length}, 1fr)">`;
+  html += '<div class="compare-cell compare-head"></div>';
+  html += plans.map(plan => `<div class="compare-cell compare-head"><div>${planName(plan)}</div><button class="compare-plan-button" type="button">Choose Plan</button></div>`).join('');
+  COMPARE_SECTIONS.forEach(section => {
+    html += `<div class="compare-cell compare-section-title">${section.title}</div>`;
+    plans.forEach(() => { html += '<div class="compare-cell compare-section-title"></div>'; });
+    section.rows.forEach(([label, values]) => {
+      html += `<div class="compare-cell compare-feature-name"><span>${label}</span><span>⌄</span></div>`;
+      plans.forEach(plan => {
+        html += `<div class="compare-cell">${compareValueHTML(values[plan])}</div>`;
+      });
+    });
+  });
+  html += '</div>';
+  table.innerHTML = html;
 }
 
 function ipUpdate() {
@@ -1044,13 +1237,14 @@ function ipUpdate() {
   const sv=document.getElementById('ip-savings');
   sv.innerHTML=savingsHTML(b); sv.classList.toggle('hidden',!savingsHTML(b));
 
-  document.getElementById('ip-over15').style.display = over15 ? '' : 'none';
+  document.getElementById('ip-over15').style.display = 'none';
 
   const plans = ['plus','grow','connect','core'].filter(p => !(u === 1 && p === 'plus') && !(u >= 5 && p === 'core'));
   document.getElementById('ip-cards-grid').classList.toggle('three-cards', plans.length === 3);
   document.getElementById('ip-badge-row').innerHTML = '';
 
   document.getElementById('ip-cards-grid').innerHTML = plans.map(p=>ipCardHTML(p,u,b,p===rec)).join('');
+  renderCompareTable(plans);
 }
 
 function ipSetup() {
@@ -1120,8 +1314,7 @@ function wzNext() { if(wzStep<WZ_TOTAL){wzStep++;renderWZ(false);}else{goToIP();
 function wzBack() { if(wzStep>1){wzStep--;renderWZ(false);} }
 function goToIP() {
   ipRec = computeRec();
-  const requestedSeats = Math.max(1, WA.empCount||1);
-  ipN = requestedSeats;
+  ipN = purchasableTeamSize(WA.empCount);
 
   // Set content before the screen fades in so there's no flash
   const parts = [];
