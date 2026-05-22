@@ -870,7 +870,7 @@ const WIZARD_VISUALS = [
 ];
 
 let wzStep = 1;
-const WZ_TOTAL = 5;
+const WZ_TOTAL = 4;
 
 function computeRec() {
   let rank = 0;
@@ -1008,19 +1008,9 @@ function renderWZ(instant) {
         ${showOtherInput ? `<input type="text" class="other-input" placeholder="Tell us what you're looking for…" value="${WA.otherGoal}" oninput="WA.otherGoal=this.value">` : ''}
       </div>`;
     }
-  } else if (wzStep === 5) {
-    h += `<div class="wizard-step-label">Step 5 of 5 — Focus</div>
-      <div class="wizard-q">Let's build the professional image you deserve</div>
-      <div class="wizard-sub">We know making your business look as good as your work can be tough. That's why we're built to help you look professional in no time.</div>
-      <div class="secondary-goals">
-        <div class="secondary-title">Tell us what you'd like to focus on <span style="font-weight:400;color:var(--navy-mid)">(optional)</span></div>
-        <div class="secondary-opts">
-          ${(WA.primaryGoal ? PG_SEC[WA.primaryGoal] || [] : PG_SEC[PG[0].title]).map(s=>`<button class="secondary-opt${WA.secondaryGoals.includes(s)?' selected':''}" onclick="togSG('${s.replace(/'/g,"\\'")}')"> ${s} </button>`).join('')}
-        </div>
-      </div>`;
   }
 
-  const canNext = (wzStep===1&&WA.industry)||(wzStep===2&&WA.empCount>=1&&WA.years)||(wzStep===3&&WA.revenue)||(wzStep===4&&WA.primaryGoal)||(wzStep===5);
+  const canNext = (wzStep===1&&WA.industry)||(wzStep===2&&WA.empCount>=1&&WA.years)||(wzStep===3&&WA.revenue)||(wzStep===4&&WA.primaryGoal);
   h += `<div class="wizard-nav" style="margin-top:8px;">
     ${wzStep > 1 ? '<button class="btn-back-w" onclick="wzBack()">Back</button>' : '<span></span>'}
     <button class="btn-next-w${wzStep===WZ_TOTAL?' green':''}" ${canNext?'':'disabled'} onclick="wzNext()">
@@ -1151,7 +1141,7 @@ function planSeatLabel(plan, users) {
 }
 
 function planBadgeHTML(plan) {
-  if (plan === 'connect') return '<span class="badge-rec green">Most Popular</span>';
+  if (plan === 'plus') return '<span class="badge-rec green">Recommended</span>';
   return '';
 }
 
