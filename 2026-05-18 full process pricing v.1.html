@@ -738,7 +738,7 @@ let p1N = 5, p1B = 'annual', p1MT = 'acbm', p1DD = false;
 
 function p1Update() {
   const u = p1N;
-  const isChat = u >= 35;
+  const isChat = u >= 16;
   updateTeamChoice('p1', u);
 
   // Billing UI
@@ -764,7 +764,7 @@ function p1Update() {
   const plusCeil = Math.max(tierCeiling('plus', u), 5);
   document.getElementById('p1-plus-users').textContent = `Includes ${plusCeil} users`;
   if (isChat) {
-    anim(document.getElementById('p1-plus-price'), "Let's Chat");
+    anim(document.getElementById('p1-plus-price'), "Let's chat");
     document.getElementById('p1-plus-mo').style.display = 'none';
     document.getElementById('p1-plus-note').textContent = '';
     document.getElementById('p1-plus-cta').innerHTML = PLUS_CTA;
@@ -779,7 +779,7 @@ function p1Update() {
   const growCeil = Math.max(tierCeiling('grow', u), 1);
   document.getElementById('p1-grow-users').textContent = growCeil === 1 ? 'Includes 1 user' : `Includes ${growCeil} users`;
   if (isChat) {
-    anim(document.getElementById('p1-grow-price'), "Let's Chat");
+    anim(document.getElementById('p1-grow-price'), "Let's chat");
     document.getElementById('p1-grow-mo').style.display = 'none';
     document.getElementById('p1-grow-note').textContent = '';
     document.getElementById('p1-grow-cta').innerHTML = CONTACT_CTA;
@@ -794,7 +794,7 @@ function p1Update() {
   const connectCeil = Math.max(tierCeiling('connect', u), 1);
   document.getElementById('p1-connect-users').textContent = connectCeil === 1 ? 'Includes 1 user' : `Includes ${connectCeil} users`;
   if (isChat) {
-    anim(document.getElementById('p1-connect-price'), "Let's Chat");
+    anim(document.getElementById('p1-connect-price'), "Let's chat");
     document.getElementById('p1-connect-mo').style.display = 'none';
     document.getElementById('p1-connect-note').textContent = '';
     document.getElementById('p1-connect-cta').innerHTML = CONTACT_CTA;
