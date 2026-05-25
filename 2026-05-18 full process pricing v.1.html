@@ -37,10 +37,17 @@
     .stepper-count-box { width:60px; height:40px; border:1.5px solid var(--navy-mid); border-radius:6px; font-size:16px; font-weight:500; color:var(--navy); background:var(--white); text-align:center; outline:none; font-family:inherit; -moz-appearance:textfield; }
     .stepper-count-box::-webkit-outer-spin-button, .stepper-count-box::-webkit-inner-spin-button { -webkit-appearance:none; }
     .stepper-count-box:focus { border-color:var(--navy); }
-    .team-size-options { display:flex; align-items:center; gap:8px; }
-    .team-size-option { min-width:58px; height:40px; padding:0 18px; border:1px solid var(--navy-light); border-radius:6px; background:var(--white); color:var(--navy); font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; transition:background .15s,border-color .15s,color .15s; }
-    .team-size-option:hover:not(.active) { border-color:var(--navy-mid); background:#f7f9fa; }
-    .team-size-option.active { background:var(--primary-green); border-color:var(--primary-green); color:var(--white); }
+    .team-size-options { position:relative; display:inline-flex; align-items:center; }
+    .team-size-trigger { height:40px; min-width:142px; padding:0 14px 0 16px; border:1px solid #dadfe2; border-radius:999px; background:#fff; color:#233d48; font-family:inherit; font-size:16px; font-weight:400; line-height:20.8px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px; box-shadow:0 1px 2px rgba(1,41,57,.08); }
+    .team-size-trigger:hover { border-color:#9eb0b7; background:#f7f9fa; }
+    .team-size-trigger:focus-visible { outline:2px solid #8ac342; outline-offset:2px; }
+    .team-size-trigger .chevron { width:16px; height:16px; }
+    .team-size-menu { display:none; position:absolute; top:calc(100% + 6px); left:0; min-width:200px; padding:8px; border:1px solid #dadfe2; border-radius:8px; background:#fff; box-shadow:0 8px 20px rgba(1,41,57,.14); z-index:120; }
+    .team-size-options.open .team-size-menu { display:block; }
+    .team-size-options.open .team-size-trigger .chevron { transform:rotate(180deg); }
+    .team-size-option { width:100%; height:40px; padding:0 12px; border:0; border-radius:6px; background:#fff; color:#233d48; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; text-align:left; transition:background .15s,color .15s; }
+    .team-size-option:hover:not(.active) { background:#f7f9fa; }
+    .team-size-option.active { background:#eef7dc; color:#233d48; }
     .billing-wrapper { position:relative; }
     .billing-toggle { display:flex; align-items:center; background:var(--white); border:1px solid #dadfe2; border-radius:8px; padding:3px; gap:2px; }
     .billing-opt { display:flex; align-items:center; gap:5px; padding:0 18px; height:36px; font-size:15px; font-weight:700; color:var(--navy); cursor:pointer; border:none; background:transparent; border-radius:6px; transition:background .15s,color .15s; white-space:nowrap; font-family:inherit; }
@@ -76,6 +83,7 @@
     .card.highlighted .btn-trial:hover { background:var(--primary-green-dark); }
     #screen-pricing .team-size-option.active,
     #screen-pricing .billing-opt.active { background:var(--navy); border-color:var(--navy); color:var(--white); }
+    #screen-pricing .team-size-menu .team-size-option.active { background:#eef7dc; border-color:transparent; color:var(--navy); }
     #screen-pricing .card.highlighted .btn-trial { background:var(--navy); color:var(--green); }
     #screen-pricing .card.highlighted .btn-trial:hover { background:#01384f; }
     #screen-pricing .card { overflow:visible; }
@@ -331,12 +339,19 @@
     <div class="controls-bar">
       <div class="control-group">
         <span class="control-label">Team size</span>
-        <div class="team-size-options" role="group" aria-label="Team size" data-team-control="p1">
-          <button class="team-size-option" type="button" data-users="1">1</button>
-          <button class="team-size-option" type="button" data-users="5">5</button>
-          <button class="team-size-option" type="button" data-users="10">10</button>
-          <button class="team-size-option" type="button" data-users="15">15</button>
+        <div class="team-size-options" data-team-control="p1">
+          <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+            <span data-team-label="p1">2-5 members</span>
+            <svg class="chevron" viewBox="0 0 14 14" fill="none"><path d="M2.5 4.5L7 9.5L11.5 4.5" stroke="#012939" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="team-size-menu" role="listbox" aria-label="Team size">
+            <button class="team-size-option" type="button" data-users="1">Just me</button>
+            <button class="team-size-option" type="button" data-users="5">2-5 members</button>
+            <button class="team-size-option" type="button" data-users="10">6-10 members</button>
+            <button class="team-size-option" type="button" data-users="15">11-15 members</button>
+            <button class="team-size-option" type="button" data-users="16">16+ members</button>
           </div>
+        </div>
       </div>
       <div class="control-group billing-group">
         <span class="control-label">Billing</span>
@@ -546,12 +561,13 @@
       <div class="ip-controls">
         <div class="control-group">
           <span class="control-label">Team size</span>
-          <div class="team-size-options" role="group" aria-label="Team size" data-team-control="ip">
-            <button class="team-size-option" type="button" data-users="1">1</button>
-            <button class="team-size-option" type="button" data-users="5">5</button>
-            <button class="team-size-option" type="button" data-users="10">10</button>
-            <button class="team-size-option" type="button" data-users="15">15</button>
-              </div>
+          <div class="team-size-options" data-team-control="ip">
+            <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span data-team-label="ip">5 members</span>
+              <svg class="chevron" viewBox="0 0 14 14" fill="none"><path d="M2.5 4.5L7 9.5L11.5 4.5" stroke="#012939" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="team-size-menu" role="listbox" aria-label="Team size"></div>
+          </div>
         </div>
         <div class="control-group billing-group">
           <span class="control-label">Billing</span>
@@ -695,10 +711,28 @@ const PLUS_CTA    = `<button class="btn-contact">Contact Sales</button><a class=
 // ═══════════════════════════════════════════════════
 
 function updateTeamChoice(scope, users) {
+  const label = document.querySelector(`[data-team-label="${scope}"]`);
+  if (label) label.textContent = scope === 'p1'
+    ? (users === 1 ? 'Just me' : users === 5 ? '2-5 members' : users === 10 ? '6-10 members' : users === 15 ? '11-15 members' : '16+ members')
+    : (users === 16 ? '16+ members' : `${users} ${users === 1 ? 'member' : 'members'}`);
   document.querySelectorAll(`[data-team-control="${scope}"] .team-size-option`).forEach(btn => {
     const val = parseInt(btn.dataset.users, 10);
     btn.classList.toggle('active', users === val);
   });
+}
+function closeTeamDropdown(scope) {
+  const control = document.querySelector(`[data-team-control="${scope}"]`);
+  if (!control) return;
+  control.classList.remove('open');
+  const trigger = control.querySelector('.team-size-trigger');
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
+}
+function toggleTeamDropdown(scope) {
+  const control = document.querySelector(`[data-team-control="${scope}"]`);
+  if (!control) return;
+  const isOpen = control.classList.toggle('open');
+  const trigger = control.querySelector('.team-size-trigger');
+  if (trigger) trigger.setAttribute('aria-expanded', String(isOpen));
 }
 let p1N = 5, p1B = 'annual', p1MT = 'acbm', p1DD = false;
 
@@ -783,12 +817,20 @@ function p1Update() {
   }
 }
 
-document.querySelectorAll('[data-team-control="p1"] .team-size-option').forEach(btn => {
-  btn.addEventListener('click', () => {
+document.querySelector('[data-team-control="p1"]').addEventListener('click', e => {
+  const trigger = e.target.closest('.team-size-trigger');
+  if (trigger) {
+    e.stopPropagation();
+    toggleTeamDropdown('p1');
+    return;
+  }
+  const btn = e.target.closest('.team-size-option');
+  if (btn) {
     p1N = parseInt(btn.dataset.users, 10);
     WA.empCount = p1N;
+    closeTeamDropdown('p1');
     p1Update();
-  });
+  }
 });
 document.getElementById('p1-opt-a').addEventListener('click', () => { p1B='annual'; p1cDD(); p1Update(); });
 document.getElementById('p1-opt-m').addEventListener('click', e => { e.stopPropagation(); if(p1DD){p1cDD();}else{p1oDD();p1B=p1MT;p1Update();} });
@@ -796,7 +838,7 @@ document.getElementById('p1-dd1').addEventListener('click', e => { e.stopPropaga
 document.getElementById('p1-dd2').addEventListener('click', e => { e.stopPropagation(); p1MT='monthly'; p1B='monthly'; p1cDD(); p1Update(); });
 function p1oDD(){ p1DD=true;  document.getElementById('p1-mdd').classList.add('open'); document.getElementById('p1-chev').classList.add('open'); }
 function p1cDD(){ p1DD=false; document.getElementById('p1-mdd').classList.remove('open'); document.getElementById('p1-chev').classList.remove('open'); }
-document.addEventListener('click', e => { if(p1DD&&!document.getElementById('p1-bwrap').contains(e.target))p1cDD(); });
+document.addEventListener('click', e => { if(p1DD&&!document.getElementById('p1-bwrap').contains(e.target))p1cDD(); if(!e.target.closest('[data-team-control="p1"]'))closeTeamDropdown('p1'); });
 p1Update();
 
 // ═══════════════════════════════════════════════════
@@ -1075,9 +1117,11 @@ const IP_TEAM_PRESETS = [1, 5, 10, 15, 16];
 function syncIPTeamOptions(users) {
   const control = document.querySelector('[data-team-control="ip"]');
   if (!control) return;
+  const menu = control.querySelector('.team-size-menu');
+  if (!menu) return;
 
-  control.innerHTML = IP_TEAM_PRESETS.map(n => (
-    `<button class="team-size-option" type="button" data-users="${n}">${n === 16 ? '16+' : n}</button>`
+  menu.innerHTML = IP_TEAM_PRESETS.map(n => (
+    `<button class="team-size-option" type="button" data-users="${n}">${n === 1 ? 'Just me' : n === 16 ? '16+ members' : `${n} members`}</button>`
   )).join('');
 }
 
@@ -1244,9 +1288,16 @@ function ipSetup() {
   document.getElementById('ip-dd1').addEventListener('click', e=>{ e.stopPropagation(); ipMT='acbm'; ipB='acbm'; ipCDD(); ipUpdate(); });
   document.getElementById('ip-dd2').addEventListener('click', e=>{ e.stopPropagation(); ipMT='monthly'; ipB='monthly'; ipCDD(); ipUpdate(); });
   document.querySelector('[data-team-control="ip"]').addEventListener('click', e => {
+    const trigger = e.target.closest('.team-size-trigger');
+    if (trigger) {
+      e.stopPropagation();
+      toggleTeamDropdown('ip');
+      return;
+    }
     const btn = e.target.closest('.team-size-option');
     if (!btn) return;
     ipN = parseInt(btn.dataset.users, 10);
+    closeTeamDropdown('ip');
     ipUpdate();
   });
   const compareToggle = document.getElementById('compare-toggle');
@@ -1259,7 +1310,7 @@ function ipSetup() {
 }
 function ipODD(){ ipDD=true;  document.getElementById('ip-mdd').classList.add('open'); document.getElementById('ip-chev').classList.add('open'); }
 function ipCDD(){ ipDD=false; document.getElementById('ip-mdd').classList.remove('open'); document.getElementById('ip-chev').classList.remove('open'); }
-document.addEventListener('click',e=>{ if(ipDD&&document.getElementById('ip-bwrap')&&!document.getElementById('ip-bwrap').contains(e.target))ipCDD(); });
+document.addEventListener('click',e=>{ if(ipDD&&document.getElementById('ip-bwrap')&&!document.getElementById('ip-bwrap').contains(e.target))ipCDD(); if(!e.target.closest('[data-team-control="ip"]'))closeTeamDropdown('ip'); });
 
 // ═══════════════════════════════════════════════════
 // NAVIGATION
