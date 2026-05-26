@@ -341,7 +341,7 @@
         <div class="team-size-options" data-team-control="p1">
           <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
             <span data-team-label="p1">2-5 members</span>
-            <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 20h4.8L19.3 9.5a2.2 2.2 0 0 0 0-3.1l-1.7-1.7a2.2 2.2 0 0 0-3.1 0L4 15.2V20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.7 5.5l4.8 4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="team-size-menu" role="listbox" aria-label="Team size">
             <button class="team-size-option" type="button" data-users="1">Just me</button>
@@ -561,8 +561,8 @@
           <span class="control-label">Team size</span>
           <div class="team-size-options" data-team-control="ip">
             <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-              <span data-team-label="ip">5 members</span>
-              <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 20h4.8L19.3 9.5a2.2 2.2 0 0 0 0-3.1l-1.7-1.7a2.2 2.2 0 0 0-3.1 0L4 15.2V20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.7 5.5l4.8 4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span data-team-label="ip">2-5 members</span>
+              <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <div class="team-size-menu" role="listbox" aria-label="Team size"></div>
           </div>
@@ -712,7 +712,7 @@ function updateTeamChoice(scope, users) {
   const label = document.querySelector(`[data-team-label="${scope}"]`);
   if (label) label.textContent = scope === 'p1'
     ? (users === 1 ? 'Just me' : users === 5 ? '2-5 members' : users === 10 ? '6-10 members' : '15+ members')
-    : (users === 15 ? '15+ members' : `${users} ${users === 1 ? 'member' : 'members'}`);
+    : (users === 1 ? 'Just me' : users === 5 ? '2-5 members' : users === 10 ? '6-10 members' : '15+ members');
   document.querySelectorAll(`[data-team-control="${scope}"] .team-size-option`).forEach(btn => {
     const val = parseInt(btn.dataset.users, 10);
     btn.classList.toggle('active', users === val);
@@ -1119,7 +1119,7 @@ function syncIPTeamOptions(users) {
   if (!menu) return;
 
   menu.innerHTML = IP_TEAM_PRESETS.map(n => (
-    `<button class="team-size-option" type="button" data-users="${n}">${n === 1 ? 'Just me' : n === 15 ? '15+ members' : `${n} members`}</button>`
+    `<button class="team-size-option" type="button" data-users="${n}">${n === 1 ? 'Just me' : n === 5 ? '2-5 members' : n === 10 ? '6-10 members' : '15+ members'}</button>`
   )).join('');
 }
 
