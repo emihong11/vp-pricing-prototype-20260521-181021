@@ -38,13 +38,12 @@
     .stepper-count-box::-webkit-outer-spin-button, .stepper-count-box::-webkit-inner-spin-button { -webkit-appearance:none; }
     .stepper-count-box:focus { border-color:var(--navy); }
     .team-size-options { position:relative; display:inline-flex; align-items:center; }
-    .team-size-trigger { height:40px; min-width:142px; padding:0 14px 0 16px; border:1px solid #dadfe2; border-radius:999px; background:#fff; color:#233d48; font-family:inherit; font-size:16px; font-weight:400; line-height:20.8px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:10px; box-shadow:0 1px 2px rgba(1,41,57,.08); }
-    .team-size-trigger:hover { border-color:#9eb0b7; background:#f7f9fa; }
+    .team-size-trigger { height:44px; min-width:178px; padding:0 14px 0 18px; border:1px solid #dadfe2; border-radius:8px; background:#fff; color:#233d48; font-family:inherit; font-size:16px; font-weight:700; line-height:20px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:14px; box-shadow:none; }
+    .team-size-trigger:hover { border-color:#9eb0b7; background:#fff; }
     .team-size-trigger:focus-visible { outline:2px solid #8ac342; outline-offset:2px; }
-    .team-size-trigger .chevron { width:16px; height:16px; }
-    .team-size-menu { display:none; position:absolute; top:calc(100% + 6px); left:0; min-width:200px; padding:8px; border:1px solid #dadfe2; border-radius:8px; background:#fff; box-shadow:0 8px 20px rgba(1,41,57,.14); z-index:120; }
+    .team-size-edit-icon { width:20px; height:20px; flex-shrink:0; color:var(--navy); }
+    .team-size-menu { display:none; position:absolute; top:calc(100% + 6px); left:0; min-width:220px; padding:8px; border:1px solid #dadfe2; border-radius:8px; background:#fff; box-shadow:0 8px 20px rgba(1,41,57,.14); z-index:120; }
     .team-size-options.open .team-size-menu { display:block; }
-    .team-size-options.open .team-size-trigger .chevron { transform:rotate(180deg); }
     .team-size-option { width:100%; height:40px; padding:0 12px; border:0; border-radius:6px; background:#fff; color:#233d48; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; text-align:left; transition:background .15s,color .15s; }
     .team-size-option:hover:not(.active) { background:#f7f9fa; }
     .team-size-option.active { background:#eef7dc; color:#233d48; }
@@ -342,7 +341,7 @@
         <div class="team-size-options" data-team-control="p1">
           <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
             <span data-team-label="p1">2-5 members</span>
-            <svg class="chevron" viewBox="0 0 14 14" fill="none"><path d="M2.5 4.5L7 9.5L11.5 4.5" stroke="#012939" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 20h4.8L19.3 9.5a2.2 2.2 0 0 0 0-3.1l-1.7-1.7a2.2 2.2 0 0 0-3.1 0L4 15.2V20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.7 5.5l4.8 4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
           </button>
           <div class="team-size-menu" role="listbox" aria-label="Team size">
             <button class="team-size-option" type="button" data-users="1">Just me</button>
@@ -564,7 +563,7 @@
           <div class="team-size-options" data-team-control="ip">
             <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
               <span data-team-label="ip">5 members</span>
-              <svg class="chevron" viewBox="0 0 14 14" fill="none"><path d="M2.5 4.5L7 9.5L11.5 4.5" stroke="#012939" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 20h4.8L19.3 9.5a2.2 2.2 0 0 0 0-3.1l-1.7-1.7a2.2 2.2 0 0 0-3.1 0L4 15.2V20Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13.7 5.5l4.8 4.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
             </button>
             <div class="team-size-menu" role="listbox" aria-label="Team size"></div>
           </div>
