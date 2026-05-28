@@ -112,6 +112,7 @@
     .btn-contact:hover { background:rgba(1,41,57,.05); }
     .btn-trial { width:100%; background:var(--green); color:var(--navy); border:none; border-radius:4px; height:40px; font-size:15px; font-weight:800; cursor:pointer; transition:background .12s; font-family:inherit; }
     .btn-trial:hover { background:var(--green-dark); }
+    .card-additional-seat-note { margin-top:12px; color:#345461; font-size:13px; line-height:18px; text-align:center; }
     .why-link { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:12px; font-size:14px; font-weight:700; color:#677f88; text-decoration:none; }
     .why-link svg { width:18px; height:18px; flex-shrink:0; }
     .why-link:hover { color:var(--navy); }
@@ -1199,6 +1200,7 @@ function ipCardHTML(plan, users, billing, isHL) {
   const pn = plan.charAt(0).toUpperCase()+plan.slice(1);
   const grey = (plan==='core'&&users>1)?' greyed':'';
   const hl   = isHL?' highlighted':'';
+  const additionalSeatNote = users >= 15 ? '<div class="card-additional-seat-note">Additional seats are USD $29/mo</div>' : '';
 
   return `<div class="card${grey}${hl}">
     <div class="card-top">
@@ -1222,6 +1224,7 @@ function ipCardHTML(plan, users, billing, isHL) {
         ? `<button class="btn-trial">Choose Plan</button>`
         : `<button class="btn-secondary-plan">Choose Plan</button>`
       }
+      ${additionalSeatNote}
     </div>
   </div>`;
 }
