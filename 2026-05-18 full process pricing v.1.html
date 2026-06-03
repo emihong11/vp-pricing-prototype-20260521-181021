@@ -348,8 +348,7 @@
             <button class="team-size-option" type="button" data-users="1">Just me</button>
             <button class="team-size-option" type="button" data-users="5">2-5 members</button>
             <button class="team-size-option" type="button" data-users="10">6-10 members</button>
-            <button class="team-size-option" type="button" data-users="15">11-15 members</button>
-            <button class="team-size-option" type="button" data-users="16">16+ members</button>
+            <button class="team-size-option" type="button" data-users="15">11-15+ members</button>
           </div>
         </div>
       </div>
@@ -715,8 +714,7 @@ function updateTeamChoice(scope, users) {
   if (label) label.textContent = users === 1 ? 'Just me'
     : users === 5 ? '2-5 members'
     : users === 10 ? '6-10 members'
-    : users === 15 ? '11-15 members'
-    : '16+ members';
+    : '11-15+ members';
   document.querySelectorAll(`[data-team-control="${scope}"] .team-size-option`).forEach(btn => {
     const val = parseInt(btn.dataset.users, 10);
     btn.classList.toggle('active', users === val);
@@ -1013,8 +1011,8 @@ function renderWZ(instant) {
       <div class="team-size-wrap">
         <div class="wizard-pill-row">
           <div class="wizard-pill-label">How many people work at your company (including you)?</div>
-          ${[[1,'Just me'],[3,'2-5 people'],[8,'6-10 people'],[13,'11-15 people'],[16,'16+ people']].map(([v,label]) => {
-            const sel = v===1 ? n===1 : v===3 ? n>=2&&n<=5 : v===8 ? n>=6&&n<=10 : v===13 ? n>=11&&n<=15 : n>=16;
+          ${[[1,'Just me'],[3,'2-5 people'],[8,'6-10 people'],[13,'11-15 people'],[18,'16-20 people'],[25,'20+ people']].map(([v,label]) => {
+            const sel = v===1 ? n===1 : v===3 ? n>=2&&n<=5 : v===8 ? n>=6&&n<=10 : v===13 ? n>=11&&n<=15 : v===18 ? n>=16&&n<=20 : n>=21;
             return `<button class="opt-btn${sel?' selected':''}" onclick="setTeamRange(${v})">${label}</button>`;
           }).join('')}
         </div>
@@ -1117,7 +1115,7 @@ function wzBack()      { if(wzStep>1){wzStep--;renderWZ();}else{showScreen('pric
 // SCREEN 3 (IN-PRODUCT)
 // ═══════════════════════════════════════════════════
 let ipN=1, ipB='annual', ipMT='acbm', ipDD=false, ipRec='connect', ipReady=false;
-const IP_TEAM_PRESETS = [1, 5, 10, 15, 16];
+const IP_TEAM_PRESETS = [1, 5, 10, 15];
 
 function syncIPTeamOptions(users) {
   const control = document.querySelector('[data-team-control="ip"]');
@@ -1126,13 +1124,13 @@ function syncIPTeamOptions(users) {
   if (!menu) return;
 
   menu.innerHTML = IP_TEAM_PRESETS.map(n => (
-    `<button class="team-size-option" type="button" data-users="${n}">${n === 1 ? 'Just me' : n === 5 ? '2-5 members' : n === 10 ? '6-10 members' : n === 15 ? '11-15 members' : '16+ members'}</button>`
+    `<button class="team-size-option" type="button" data-users="${n}">${n === 1 ? 'Just me' : n === 5 ? '2-5 members' : n === 10 ? '6-10 members' : '11-15+ members'}</button>`
   )).join('');
 }
 
 function purchasableTeamSize(users) {
   const requestedSeats = Math.max(1, users || 1);
-  return IP_TEAM_PRESETS.find(size => requestedSeats <= size) || 16;
+  return IP_TEAM_PRESETS.find(size => requestedSeats <= size) || 15;
 }
 
 const CKSV = `<svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
