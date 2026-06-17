@@ -341,14 +341,15 @@
         <span class="control-label">Team size</span>
         <div class="team-size-options" data-team-control="p1">
           <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-            <span data-team-label="p1">2-5 members</span>
+            <span data-team-label="p1">Just me</span>
             <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="team-size-menu" role="listbox" aria-label="Team size">
             <button class="team-size-option" type="button" data-users="1">Just me</button>
-            <button class="team-size-option" type="button" data-users="5">2-5 members</button>
-            <button class="team-size-option" type="button" data-users="10">6-10 members</button>
-            <button class="team-size-option" type="button" data-users="15">11-15+ members</button>
+            <button class="team-size-option" type="button" data-users="5">2-5 people</button>
+            <button class="team-size-option" type="button" data-users="10">6-10 people</button>
+            <button class="team-size-option" type="button" data-users="15">11-15 people</button>
+            <button class="team-size-option" type="button" data-users="16">16+ people</button>
           </div>
         </div>
       </div>
@@ -379,7 +380,7 @@
       <div class="card" id="p1-card-plus">
         <div class="card-top">
           <div class="card-name-row"><div class="card-name">Plus</div><span class="badge-rec" id="p1-badge-plus" style="display:none">Recommended</span></div>
-          <div class="card-users-row"><div class="card-users-label" id="p1-plus-users">Includes 5 users</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are team members who log into Jobber. Extra users are $29/mo each. Need 15+? <a href="#">Contact us</a></span></span></div>
+          <div class="card-users-row"><div class="card-users-label" id="p1-plus-users">Includes 5 users</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are people who log into Jobber. Extra users are $29/mo each. Need 15+? <a href="#">Contact us</a></span></span></div>
           <div class="card-desc">All features backed by premium support to maximize efficiency and profits.</div>
         </div>
         <div class="card-price">
@@ -387,7 +388,7 @@
           <div class="price-note" id="p1-plus-note">Billed annually</div>
         </div>
         <div class="card-cta" id="p1-plus-cta">
-          <button class="btn-contact">Contact Sales</button>
+          <button class="btn-contact">Contact Us</button>
           <a class="why-link" href="#" aria-label="Why Plus?">
             <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M7.25 5.75L12 9L7.25 12.25V5.75Z" fill="currentColor"/></svg>
             <span>Why Plus?</span>
@@ -407,7 +408,7 @@
       <div class="card" id="p1-card-grow">
         <div class="card-top">
           <div class="card-name-row"><div class="card-name">Grow</div><span class="badge-rec" id="p1-badge-grow" style="display:none">Recommended</span></div>
-          <div class="card-users-row"><div class="card-users-label" id="p1-grow-users">Includes 1 user</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are team members who log into Jobber. Extra users are $29/mo each. Need 15+? <a href="#">Contact us</a></span></span></div>
+          <div class="card-users-row"><div class="card-users-label" id="p1-grow-users">Includes 1 user</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are people who log into Jobber. Extra users are $29/mo each. Need 15+? <a href="#">Contact us</a></span></span></div>
           <div class="card-desc">Advanced tools to win bigger jobs, scale your operations, and take back your admin time.</div>
         </div>
         <div class="card-price">
@@ -432,7 +433,7 @@
       <div class="card" id="p1-card-connect">
         <div class="card-top">
           <div class="card-name-row"><div class="card-name">Connect</div><span class="badge-rec" id="p1-badge-connect">Recommended</span></div>
-          <div class="card-users-row"><div class="card-users-label" id="p1-connect-users">Includes 1 user</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are team members who log into Jobber. Extra users are $29/mo each. Need 15+? <a href="#">Contact us</a></span></span></div>
+          <div class="card-users-row"><div class="card-users-label" id="p1-connect-users">Includes 1 user</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are people who log into Jobber. Extra users are $29/mo each. Need 15+? <a href="#">Contact us</a></span></span></div>
           <div class="card-desc">Automations and must-have integrations to reduce admin work and impress customers.</div>
         </div>
         <div class="card-price">
@@ -562,7 +563,7 @@
           <span class="control-label">Team size</span>
           <div class="team-size-options" data-team-control="ip">
             <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-              <span data-team-label="ip">2-5 members</span>
+              <span data-team-label="ip">Just me</span>
               <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <div class="team-size-menu" role="listbox" aria-label="Team size"></div>
@@ -701,9 +702,9 @@ function anim(el, txt) {
   setTimeout(() => { el.textContent = txt; el.classList.remove('animating'); }, 110);
 }
 
-const CONTACT_CTA = `<button class="btn-contact">Contact Sales</button><div class="cta-spacer"></div>`;
+const CONTACT_CTA = `<button class="btn-contact">Contact Us</button><div class="cta-spacer"></div>`;
 const TRIAL_CTA   = `<button class="btn-trial" onclick="goToWizard()">Try Jobber For Free</button><div class="cta-spacer"></div>`;
-const PLUS_CTA    = `<button class="btn-contact">Contact Sales</button><a class="why-link" href="#" aria-label="Why Plus?"><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M7.25 5.75L12 9L7.25 12.25V5.75Z" fill="currentColor"/></svg><span>Why Plus?</span></a>`;
+const PLUS_CTA    = `<button class="btn-contact">Contact Us</button><a class="why-link" href="#" aria-label="Why Plus?"><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M7.25 5.75L12 9L7.25 12.25V5.75Z" fill="currentColor"/></svg><span>Why Plus?</span></a>`;
 
 // ═══════════════════════════════════════════════════
 // SCREEN 1
@@ -712,9 +713,10 @@ const PLUS_CTA    = `<button class="btn-contact">Contact Sales</button><a class=
 function updateTeamChoice(scope, users) {
   const label = document.querySelector(`[data-team-label="${scope}"]`);
   if (label) label.textContent = users === 1 ? 'Just me'
-    : users === 5 ? '2-5 members'
-    : users === 10 ? '6-10 members'
-    : '11-15+ members';
+    : users === 5 ? '2-5 people'
+    : users === 10 ? '6-10 people'
+    : users === 15 ? '11-15 people'
+    : '16+ people';
   document.querySelectorAll(`[data-team-control="${scope}"] .team-size-option`).forEach(btn => {
     const val = parseInt(btn.dataset.users, 10);
     btn.classList.toggle('active', users === val);
@@ -734,7 +736,7 @@ function toggleTeamDropdown(scope) {
   const trigger = control.querySelector('.team-size-trigger');
   if (trigger) trigger.setAttribute('aria-expanded', String(isOpen));
 }
-let p1N = 5, p1B = 'annual', p1MT = 'acbm', p1DD = false;
+let p1N = 1, p1B = 'annual', p1MT = 'acbm', p1DD = false;
 
 function p1Update() {
   const u = p1N;
@@ -1115,7 +1117,7 @@ function wzBack()      { if(wzStep>1){wzStep--;renderWZ();}else{showScreen('pric
 // SCREEN 3 (IN-PRODUCT)
 // ═══════════════════════════════════════════════════
 let ipN=1, ipB='annual', ipMT='acbm', ipDD=false, ipRec='connect', ipReady=false;
-const IP_TEAM_PRESETS = [1, 5, 10, 15];
+const IP_TEAM_PRESETS = [1, 5, 10, 15, 16];
 
 function syncIPTeamOptions(users) {
   const control = document.querySelector('[data-team-control="ip"]');
@@ -1124,13 +1126,13 @@ function syncIPTeamOptions(users) {
   if (!menu) return;
 
   menu.innerHTML = IP_TEAM_PRESETS.map(n => (
-    `<button class="team-size-option" type="button" data-users="${n}">${n === 1 ? 'Just me' : n === 5 ? '2-5 members' : n === 10 ? '6-10 members' : '11-15+ members'}</button>`
+    `<button class="team-size-option" type="button" data-users="${n}">${n === 1 ? 'Just me' : n === 5 ? '2-5 people' : n === 10 ? '6-10 people' : n === 15 ? '11-15 people' : '16+ people'}</button>`
   )).join('');
 }
 
 function purchasableTeamSize(users) {
   const requestedSeats = Math.max(1, users || 1);
-  return IP_TEAM_PRESETS.find(size => requestedSeats <= size) || 15;
+  return IP_TEAM_PRESETS.find(size => requestedSeats <= size) || 16;
 }
 
 const CKSV = `<svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
@@ -1215,7 +1217,7 @@ function ipCardHTML(plan, users, billing, isHL) {
     <div class="card-price">
       ${comparePrice ? `<div class="price-compare">$${comparePrice}/mo</div>` : ''}
       <div class="price-row"><span class="price-amount${contactSales?' chat-copy':''}">${contactSales ? "Let's chat" : '$'+price}</span>${contactSales ? '' : '<span class="price-mo">/mo</span>'}</div>
-      <div class="price-note">${contactSales ? 'Contact sales for custom pricing' : billingPriceNote(billing)}</div>
+      <div class="price-note">${contactSales ? 'Contact us for custom pricing' : billingPriceNote(billing)}</div>
     </div>
     <div class="card-features">
       <div class="features-title">${f.t}</div>
@@ -1223,7 +1225,7 @@ function ipCardHTML(plan, users, billing, isHL) {
     </div>
     <div class="card-cta">
       ${contactSales
-        ? (plan === 'plus' ? `<button class="btn-trial">Contact Sales</button>` : `<button class="btn-contact-sales-plan">Contact Sales</button>`)
+        ? (plan === 'plus' ? `<button class="btn-trial">Contact Us</button>` : `<button class="btn-contact-sales-plan">Contact Us</button>`)
         : plan === 'plus' || isHL
         ? `<button class="btn-trial">Choose Plan</button>`
         : `<button class="btn-secondary-plan">Choose Plan</button>`
