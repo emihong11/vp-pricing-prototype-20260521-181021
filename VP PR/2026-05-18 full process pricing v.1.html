@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobber Pricing</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy: #012939; --navy-mid: #344F61; --navy-light: #CAD7DC;
+      --green: #B8E833; --green-dark: #8ab828; --white: #FFFFFF;
+      --primary-green: #2F7D20; --primary-green-dark: #246618;
+      --grey-bg: #F0EDEA; --off-white: #F2F0EA;
+    }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #fff; color: var(--navy); }
+    .screen { display: none; } .screen.active { display: block; }
+
+    /* HERO */
+    .hero { width:100%; background-color:#012939; padding:72px 40px 80px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px; position:relative; overflow:hidden; }
+    .hero::before { content:''; position:absolute; inset:0; background-image:radial-gradient(circle at 20% 50%,rgba(184,232,51,.08) 0%,transparent 60%),radial-gradient(circle at 80% 20%,rgba(184,232,51,.05) 0%,transparent 50%); }
+    .hero-title { font-weight:900; font-size:clamp(32px,4vw,50px); line-height:1.1; color:var(--off-white); text-align:center; position:relative; z-index:1; }
+    .hero-sub { font-size:18px; line-height:28px; color:rgba(242,240,234,.8); text-align:center; position:relative; z-index:1; }
+    .hero-rip { width:100%; height:32px; background:#fff; clip-path:polygon(0 100%,3% 20%,6% 80%,9% 10%,12% 70%,15% 30%,18% 85%,21% 15%,24% 65%,27% 25%,30% 75%,33% 40%,36% 80%,39% 10%,42% 60%,45% 30%,48% 70%,51% 20%,54% 75%,57% 35%,60% 65%,63% 15%,66% 70%,69% 40%,72% 80%,75% 25%,78% 60%,81% 20%,84% 75%,87% 30%,90% 65%,93% 15%,96% 55%,100% 20%,100% 100%); }
+
+    /* PRICING SECTION */
+    .pricing-section { max-width:1440px; margin:0 auto; padding:40px 40px 56px; }
+    .controls-bar { display:flex; align-items:center; justify-content:flex-start; column-gap:40px; row-gap:16px; margin-bottom:44px; flex-wrap:wrap; }
+    .control-group { display:flex; align-items:center; gap:10px; }
+    .control-label { font-size:14px; font-weight:400; color:var(--navy); white-space:nowrap; }
+    .stepper { display:flex; align-items:center; gap:6px; }
+    .stepper-btn { width:40px; height:40px; border-radius:50%; border:1.5px solid var(--navy-mid); background:transparent; color:var(--navy); font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .12s; user-select:none; flex-shrink:0; }
+    .stepper-btn:hover:not(:disabled) { background:#f0f4f5; }
+    .stepper-btn:disabled { opacity:.35; cursor:not-allowed; pointer-events:none; }
+    .stepper-btn.plus-btn { background:var(--navy); border-color:var(--navy); color:var(--white); }
+    .stepper-btn.plus-btn:hover:not(:disabled) { background:#01384f; }
+    .stepper-count-box { width:60px; height:40px; border:1.5px solid var(--navy-mid); border-radius:6px; font-size:16px; font-weight:500; color:var(--navy); background:var(--white); text-align:center; outline:none; font-family:inherit; -moz-appearance:textfield; }
+    .stepper-count-box::-webkit-outer-spin-button, .stepper-count-box::-webkit-inner-spin-button { -webkit-appearance:none; }
+    .stepper-count-box:focus { border-color:var(--navy); }
+    .team-size-options { position:relative; display:inline-flex; align-items:center; }
+    .team-size-trigger { height:44px; min-width:178px; padding:0 14px 0 18px; border:1px solid #dadfe2; border-radius:8px; background:#fff; color:#233d48; font-family:inherit; font-size:16px; font-weight:700; line-height:20px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:14px; box-shadow:none; }
+    .team-size-trigger:hover { border-color:#9eb0b7; background:#fff; }
+    .team-size-trigger:focus-visible { outline:2px solid #8ac342; outline-offset:2px; }
+    .team-size-edit-icon { width:20px; height:20px; flex-shrink:0; color:var(--navy); }
+    .team-size-menu { display:none; position:absolute; top:calc(100% + 6px); left:0; min-width:220px; padding:8px; border:1px solid #dadfe2; border-radius:8px; background:#fff; box-shadow:0 8px 20px rgba(1,41,57,.14); z-index:120; }
+    .team-size-options.open .team-size-menu { display:block; }
+    .team-size-option { width:100%; height:40px; padding:0 12px; border:0; border-radius:6px; background:#fff; color:#233d48; font-family:inherit; font-size:14px; font-weight:600; cursor:pointer; text-align:left; transition:background .15s,color .15s; }
+    .team-size-option:hover:not(.active) { background:#f7f9fa; }
+    .team-size-option.active { background:#eef7dc; color:#233d48; }
+    .billing-wrapper { position:relative; }
+    .billing-toggle { display:flex; align-items:center; background:var(--white); border:1px solid #dadfe2; border-radius:8px; padding:3px; gap:2px; }
+    .billing-opt { display:flex; align-items:center; gap:5px; padding:0 18px; height:36px; font-size:15px; font-weight:700; color:var(--navy); cursor:pointer; border:none; background:transparent; border-radius:6px; transition:background .15s,color .15s; white-space:nowrap; font-family:inherit; }
+    .billing-opt.active { background:var(--primary-green); color:var(--white); }
+    .billing-opt:hover:not(.active) { background:#f7f9fa; }
+    .billing-group { margin-right:-28px; }
+    .chevron { width:14px; height:14px; transition:transform .2s; flex-shrink:0; }
+    .billing-opt.active .chevron path { stroke:var(--white); }
+    .chevron.open { transform:rotate(180deg); }
+    .monthly-dropdown { display:none; position:absolute; top:calc(100% + 6px); left:0; background:var(--white); border:1px solid var(--navy-light); border-radius:8px; box-shadow:0 4px 16px rgba(1,41,57,.12); min-width:200px; z-index:100; overflow:hidden; }
+    .monthly-dropdown.open { display:block; }
+    .dropdown-opt { padding:11px 16px; font-size:14px; color:var(--navy); cursor:pointer; transition:background .1s; }
+    .dropdown-opt:hover { background:#f4f7f8; }
+    .dropdown-opt.selected { font-weight:600; }
+    .savings-pill { display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 14px; border-radius:999px; background:#eef2f3; color:var(--navy); font-size:16px; font-weight:400; line-height:20.8px; }
+    .savings-pill.hidden { visibility:hidden; }
+    .savings-pill svg { width:24px; height:24px; flex-shrink:0; }
+    #screen-pricing .savings-pill { height:auto; padding:0; border-radius:0; background:transparent; gap:4px; font-size:18px; line-height:24px; }
+    #screen-pricing .savings-pill .promo-strong { font-weight:800; text-decoration:underline; text-decoration-color:var(--green); text-decoration-thickness:3px; text-underline-offset:4px; }
+    .additional-seat-note { display:none; align-items:center; gap:8px; min-height:40px; padding:0 14px; border-radius:999px; background:#eef7dc; color:var(--navy); font-size:14px; font-weight:700; line-height:18px; }
+    .additional-seat-note.visible { display:inline-flex; }
+    .additional-seat-note svg { width:20px; height:20px; flex-shrink:0; }
+    .controls-bar .additional-seat-note,
+    .ip-controls .additional-seat-note { margin-left:auto; }
+
+    /* CARDS */
+    .cards-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; align-items:stretch; }
+    .cards-grid.three-cards { grid-template-columns:repeat(3,1fr); }
+    .card { background:var(--white); border:1px solid var(--navy-light); border-radius:4px; display:flex; flex-direction:column; overflow:hidden; transition:opacity .25s; }
+    .card.greyed { opacity:.38; pointer-events:none; }
+    .card.highlighted { border-color:var(--navy); border-width:2px; box-shadow:0 4px 20px rgba(1,41,57,.12); }
+    .card.highlighted .btn-trial { background:var(--primary-green); color:var(--white); }
+    .card.highlighted .btn-trial:hover { background:var(--primary-green-dark); }
+    #screen-pricing .team-size-option.active,
+    #screen-pricing .billing-opt.active { background:var(--navy); border-color:var(--navy); color:var(--white); }
+    #screen-pricing .team-size-menu .team-size-option.active { background:#eef7dc; border-color:transparent; color:var(--navy); }
+    #screen-pricing .card.highlighted .btn-trial { background:var(--navy); color:var(--green); }
+    #screen-pricing .card.highlighted .btn-trial:hover { background:#01384f; }
+    #screen-pricing .card { overflow:visible; }
+    .card-top { padding:16px 16px 0; flex:0 0 auto; }
+    .card-name-row { display:flex; align-items:center; justify-content:space-between; }
+    .card-name { font-size:32px; font-weight:900; color:var(--navy); line-height:40px; }
+    .badge-rec { background:rgba(203,238,102,.5); color:var(--navy); font-size:12px; font-weight:600; padding:2px 8px; border-radius:29px; white-space:nowrap; }
+    .card-users-label { font-size:14px; font-weight:600; color:var(--navy); margin-top:8px; line-height:24px; }
+    .card-users-row { display:flex; align-items:center; gap:8px; margin-top:8px; position:relative; }
+    .card-users-row .card-users-label { margin-top:0; }
+    .user-tooltip { position:relative; display:inline-flex; align-items:center; justify-content:center; width:20px; height:20px; border-radius:50%; background:var(--navy); color:#fff; font-size:13px; font-weight:800; line-height:1; cursor:help; flex-shrink:0; }
+    .user-tooltip-bubble { position:absolute; left:50%; bottom:calc(100% + 12px); transform:translateX(-50%); width:280px; padding:16px; border-radius:8px; background:var(--navy); color:#fff; font-size:14px; font-weight:400; line-height:20px; opacity:0; visibility:hidden; pointer-events:none; z-index:50; box-shadow:0 8px 20px rgba(1,41,57,.24); }
+    .user-tooltip-bubble::after { content:''; position:absolute; left:50%; bottom:-8px; transform:translateX(-50%); border-left:8px solid transparent; border-right:8px solid transparent; border-top:8px solid var(--navy); }
+    .user-tooltip:hover .user-tooltip-bubble,
+    .user-tooltip:focus .user-tooltip-bubble { opacity:1; visibility:visible; }
+    .user-tooltip-bubble a { color:#fff; text-decoration:underline; text-underline-offset:2px; }
+    .card-desc { font-size:14px; color:var(--navy-mid); line-height:20px; margin-top:8px; min-height:60px; }
+    .card-price { padding:16px 16px 0; flex:0 0 auto; }
+    .price-compare { color:#5d757e; font-size:16px; line-height:20px; text-decoration:line-through; text-decoration-thickness:1px; min-height:20px; }
+    .price-compare:empty { display:none; }
+    .price-row { display:flex; align-items:flex-end; gap:1px; }
+    .price-amount { font-size:40px; font-weight:900; color:var(--navy); line-height:48px; transition:opacity .12s; }
+    .price-amount.sm { font-size:26px; line-height:48px; }
+    .price-amount.animating { opacity:0; }
+    .price-mo { font-size:16px; font-weight:700; color:var(--navy); padding-bottom:6px; }
+    .price-note { font-size:14px; color:var(--navy); margin-top:2px; line-height:20px; }
+    .card-cta { padding:16px; flex:0 0 auto; }
+    .btn-contact { width:100%; background:transparent; border:2px solid var(--navy); border-radius:4px; height:40px; font-size:15px; font-weight:800; cursor:pointer; transition:background .12s; font-family:inherit; color:var(--navy); }
+    .btn-contact:hover { background:rgba(1,41,57,.05); }
+    .btn-trial { width:100%; background:var(--green); color:var(--navy); border:none; border-radius:4px; height:40px; font-size:15px; font-weight:800; cursor:pointer; transition:background .12s; font-family:inherit; }
+    .btn-trial:hover { background:var(--green-dark); }
+    .card-additional-seat-note { margin-top:12px; color:#345461; font-size:13px; line-height:18px; text-align:center; }
+    .why-link { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:12px; font-size:14px; font-weight:700; color:#677f88; text-decoration:none; }
+    .why-link svg { width:18px; height:18px; flex-shrink:0; }
+    .why-link:hover { color:var(--navy); }
+    .cta-spacer { height:29px; margin-top:8px; }
+    .card-features { padding:0 16px 20px; flex:1; }
+    .features-title { font-size:13px; font-weight:600; color:var(--navy); margin-bottom:8px; line-height:21px; }
+    .feature { display:flex; align-items:flex-start; gap:8px; margin-bottom:8px; font-size:13px; color:var(--navy); line-height:21px; }
+    .check { flex-shrink:0; margin-top:3px; }
+    .cards-footer { margin-top:40px; display:flex; flex-direction:column; align-items:center; gap:40px; }
+    .wizard-link { font-size:16px; font-weight:600; color:var(--navy); text-decoration:underline; text-underline-offset:2px; cursor:pointer; text-align:center; background:none; border:none; font-family:inherit; }
+    .wizard-link:hover { opacity:.75; }
+    .btn-see-all { background:transparent; border:2px solid var(--navy); border-radius:4px; height:40px; padding:0 24px; font-size:15px; font-weight:800; font-family:inherit; color:var(--navy); cursor:pointer; transition:background .12s; }
+    .btn-see-all:hover { background:rgba(1,41,57,.05); }
+    .disclaimer { text-align:center; font-size:14px; color:#345461; line-height:20px; }
+    .disclaimer a { color:#345461; }
+
+    /* WIZARD */
+    .wizard-screen { min-height:100vh; background:#fff; display:grid; grid-template-columns:minmax(420px,42vw) 1fr; grid-template-rows:auto 1fr; column-gap:0; padding:64px 0 0 18vw; overflow:hidden; }
+    .wizard-header { width:100%; max-width:520px; display:flex; flex-direction:column; align-items:flex-start; justify-content:flex-start; gap:32px; margin-bottom:40px; grid-column:1; grid-row:1; }
+    .wizard-logo { display:flex; align-items:center; gap:8px; }
+    .wizard-logo-mark { width:16px; height:16px; background:var(--navy); border-radius:4px; display:flex; align-items:center; justify-content:center; }
+    .wizard-logo-mark svg { width:11px; height:11px; }
+    .wizard-logo-text { font-weight:900; font-size:14px; letter-spacing:1.4px; color:var(--navy); text-transform:uppercase; }
+    .wizard-progress-wrap { width:100%; max-width:286px; margin:0; }
+    .wizard-progress-label { display:none; }
+    .wizard-progress-bar { height:6px; background:#d9dddc; border-radius:999px; overflow:hidden; }
+    .wizard-progress-fill { height:100%; background:#2b7d23; border-radius:999px; transition:width .3s ease; }
+    .wizard-card { width:100%; max-width:520px; background:#fff; border-radius:0; padding:0 0 64px; box-shadow:none; grid-column:1; grid-row:2; }
+    .wizard-step-label { display:none; }
+    .wizard-q { font-size:28px; font-weight:900; color:var(--navy); line-height:30px; letter-spacing:-.2px; margin-bottom:12px; max-width:340px; }
+    .wizard-sub { font-size:13px; color:#424E56; line-height:18px; margin-bottom:28px; max-width:360px; }
+    .options-grid { display:flex; flex-wrap:wrap; gap:10px; margin-bottom:32px; max-width:360px; }
+    .options-grid.col2 { display:flex; }
+    .opt-btn { min-height:36px; padding:0 16px; border-radius:999px; border:1px solid #dadfe2; background:#fff; color:var(--navy); font-size:13px; font-weight:500; cursor:pointer; text-align:left; transition:all .15s; font-family:inherit; line-height:18px; }
+    .opt-btn:hover { border-color:#2b7d23; background:#f7fbf4; }
+    .opt-btn.selected { border-color:#2b7d23; background:#eef7dc; font-weight:700; }
+    .opt-btn.selected::after { content:''; }
+    .goal-card { width:100%; padding:13px 16px; border-radius:4px; border:1px solid #dadfe2; background:#fff; cursor:pointer; transition:all .15s; font-family:inherit; text-align:left; }
+    .goal-card:hover { border-color:#2b7d23; }
+    .goal-card.selected { border-color:#2b7d23; background:#f7fbf4; }
+    .goal-card-icon { display:none; }
+    .goal-card-title { font-size:13px; font-weight:500; color:var(--navy); margin-bottom:0; line-height:18px; }
+    .goal-card-desc { display:none; }
+    .secondary-goals { margin-bottom:32px; }
+    .secondary-title { font-size:15px; font-weight:700; color:var(--navy); margin-bottom:14px; }
+    .secondary-opts { display:flex; flex-wrap:wrap; gap:10px; max-width:360px; }
+    .secondary-opt { min-height:36px; padding:0 16px; border-radius:4px; border:1px solid #dadfe2; background:#fff; color:var(--navy); font-size:13px; font-weight:500; cursor:pointer; transition:all .15s; font-family:inherit; }
+    .secondary-opt:hover { border-color:#2b7d23; }
+    .secondary-opt.selected { border-color:#2b7d23; background:#eef7dc; font-weight:700; }
+    .other-input { width:100%; padding:12px 16px; border:1.5px solid var(--navy-light); border-radius:10px; font-size:14px; font-family:inherit; color:var(--navy); outline:none; transition:border-color .15s; margin-top:12px; }
+    .other-input:focus { border-color:var(--navy); }
+    .industry-search { width:100%; max-width:500px; height:52px; padding:0 24px; border:1px solid #9eb0b7; border-radius:6px; font-size:16px; font-family:inherit; color:var(--navy); outline:none; margin-bottom:0; transition:border-color .15s, box-shadow .15s; }
+    .industry-search:focus { border-color:#d83b2a; box-shadow:0 0 0 2px rgba(216,59,42,.15); }
+    .industry-list { display:none; width:100%; max-width:500px; max-height:300px; overflow-y:auto; border:1px solid #dadfe2; border-radius:0 0 6px 6px; box-shadow:0 6px 14px rgba(1,41,57,.12); }
+    .industry-list.open { display:block; }
+    .industry-group { padding:8px 12px 6px; border-bottom:1px solid #dadfe2; color:var(--navy); font-size:14px; font-weight:800; }
+    .industry-item { display:block; width:100%; padding:9px 32px; border:0; border-radius:0; background:#fff; font-size:14px; font-weight:500; color:var(--navy); cursor:pointer; transition:background .15s; font-family:inherit; text-align:left; }
+    .industry-item:hover { background:#ebe9e3; }
+    .industry-item.selected { background:#ebe9e3; font-weight:500; }
+    /* Team size number input */
+    .team-size-wrap { display:flex; flex-direction:column; align-items:flex-start; gap:16px; margin-bottom:32px; }
+    .team-size-row { display:flex; flex-wrap:wrap; align-items:center; gap:10px; max-width:360px; }
+    .ts-btn { width:52px; height:52px; border-radius:50%; border:1.5px solid var(--navy-mid); background:transparent; color:var(--navy); font-size:28px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .12s; flex-shrink:0; font-family:inherit; line-height:1; }
+    .ts-btn:hover:not(:disabled) { background:#f0f4f5; }
+    .ts-btn:disabled { opacity:.35; cursor:not-allowed; }
+    .ts-btn.inc { background:var(--navy); border-color:var(--navy); color:var(--white); }
+    .ts-btn.inc:hover:not(:disabled) { background:#01384f; }
+    .ts-input { width:84px; height:60px; border:2px solid var(--navy); border-radius:10px; font-size:30px; font-weight:700; color:var(--navy); text-align:center; font-family:inherit; outline:none; -moz-appearance:textfield; }
+    .ts-input::-webkit-outer-spin-button, .ts-input::-webkit-inner-spin-button { -webkit-appearance:none; }
+    .ts-hint { font-size:13px; color:var(--navy-mid); }
+    .wizard-pill-row { display:flex; flex-wrap:wrap; gap:10px; max-width:360px; margin-bottom:24px; }
+    .wizard-pill-label { width:100%; color:var(--navy); font-size:13px; font-weight:800; line-height:18px; margin-bottom:2px; }
+    .wizard-pill-label.with-gap { margin-bottom:14px; }
+    .wz-restart-btn { display:flex; align-items:center; gap:5px; flex-shrink:0; background:none; border:1px solid var(--navy-light); border-radius:6px; padding:6px 12px; color:var(--navy-mid); font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; transition:background .15s, color .15s; white-space:nowrap; }
+    .wz-restart-btn:hover { background:rgba(1,41,57,.06); color:var(--navy); border-color:var(--navy-mid); }
+    .wizard-nav { display:flex; align-items:center; justify-content:space-between; }
+    .wizard-restart-row { display:flex; justify-content:flex-start; margin-top:16px; }
+    .btn-back-w { display:flex; align-items:center; gap:6px; background:none; border:none; cursor:pointer; color:var(--navy-mid); font-size:14px; font-weight:600; font-family:inherit; padding:0; }
+    .btn-back-w:hover { color:var(--navy); }
+    .btn-next-w { padding:13px 36px; border-radius:8px; background:var(--navy); color:#fff; border:none; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; transition:background .15s; }
+    .btn-next-w:hover:not(:disabled) { background:#01384f; }
+    .btn-next-w:disabled { opacity:.4; cursor:not-allowed; }
+    .btn-next-w.green { background:var(--green); color:var(--navy); }
+    .btn-next-w.green:hover:not(:disabled) { background:var(--green-dark); }
+    .wizard-visual { grid-column:2; grid-row:1 / span 2; position:relative; min-height:100vh; background-color:#012939; background-image:linear-gradient(rgba(1,41,57,.18),rgba(1,41,57,.18)), var(--wizard-image); background-size:cover; background-position:center right; color:#fff; overflow:hidden; }
+    .wizard-visual::before { content:''; position:absolute; top:-4%; bottom:-4%; left:-34px; width:90px; background:#fff; clip-path:polygon(0 0,62% 0,44% 8%,70% 16%,45% 26%,68% 36%,43% 48%,70% 60%,45% 73%,66% 86%,48% 100%,0 100%); z-index:2; }
+    .wizard-visual::after { content:''; position:absolute; inset:0; background:linear-gradient(90deg, rgba(1,41,57,.05), rgba(1,41,57,.25)); opacity:.65; }
+    .wizard-visual-content { position:absolute; left:22%; right:8%; bottom:13%; z-index:3; max-width:420px; }
+    .visual-kicker { color:var(--green); font-size:16px; font-weight:900; text-transform:uppercase; margin-bottom:8px; }
+    .visual-title { color:#fff; font-size:32px; line-height:36px; font-weight:900; letter-spacing:-.3px; margin-bottom:14px; }
+    .visual-copy { color:#eef7dc; font-size:16px; line-height:23px; font-weight:700; }
+    @media (max-width: 1100px) {
+      .wizard-screen { grid-template-columns:1fr; padding:48px 28px 64px; }
+      .wizard-header, .wizard-card { max-width:560px; }
+      .wizard-visual { display:none; }
+    }
+
+    /* IN-PRODUCT */
+    .inproduct-shell { min-height:100vh; background:#fff; padding-left:188px; padding-top:60px; }
+    .inproduct-topbar { display:none; }
+    .app-side-nav { position:fixed; top:0; left:0; bottom:0; width:188px; background:#f2f0ea; z-index:20; display:flex; flex-direction:column; padding:0 8px 16px; gap:4px; }
+    .side-logo { width:56px; height:60px; margin:0 0 8px; display:flex; align-items:center; justify-content:center; }
+    .side-logo img { width:29px; height:25px; }
+    .side-item { height:32px; display:flex; align-items:center; gap:8px; padding:0 8px; border-radius:6px; color:var(--navy); font-size:12px; font-weight:700; }
+    .side-item span:first-child { width:24px; text-align:center; font-size:18px; color:var(--navy); line-height:1; }
+    .side-divider { height:1px; background:#d9d4cc; margin:8px; }
+    .app-top-bar { position:fixed; top:0; left:188px; right:0; height:60px; background:#fff; z-index:19; display:flex; align-items:center; justify-content:space-between; padding:0 16px; box-shadow:0 1px 4px rgba(0,0,0,.16); }
+    .top-company { color:#657884; font-size:14px; }
+    .top-actions { display:flex; align-items:center; gap:16px; color:var(--navy); font-size:18px; }
+    .top-search { height:40px; width:156px; border-radius:8px; background:#f2f0ea; display:flex; align-items:center; gap:8px; padding:0 12px; color:#424E56; font-size:14px; }
+    .ip-logo { display:flex; align-items:center; gap:8px; }
+    .ip-logo-mark { width:28px; height:28px; background:var(--green); border-radius:6px; display:flex; align-items:center; justify-content:center; }
+    .ip-logo-text { font-weight:800; font-size:16px; letter-spacing:2px; color:#fff; text-transform:uppercase; }
+    .ip-back-btn { display:flex; align-items:center; gap:6px; background:none; border:1px solid rgba(255,255,255,.3); border-radius:6px; padding:6px 14px; color:#fff; font-size:13px; font-weight:600; cursor:pointer; font-family:inherit; transition:background .15s; }
+    .ip-back-btn:hover { background:rgba(255,255,255,.1); }
+    .ip-content { width:1258px; max-width:calc(100vw - 228px); margin:0 auto; padding:108px 0 72px; }
+    .ip-header { text-align:left; margin-bottom:48px; }
+    .ip-badge, .rec-banner, #ip-badge-row { display:none !important; }
+    .ip-title { font-size:40px; font-weight:900; color:var(--navy); line-height:40px; margin-bottom:12px; letter-spacing:-0.4px; }
+    .ip-subtitle { font-size:16px; color:#49646f; line-height:21px; }
+    .over15-banner { background:#fff8e1; border:1px solid #ffe082; border-left:4px solid #f59e0b; border-radius:8px; padding:14px 20px; margin-bottom:24px; display:flex; align-items:flex-start; gap:12px; }
+    .over15-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
+    .over15-text { font-size:14px; color:#78350f; line-height:1.6; }
+    .over15-text a { color:#78350f; font-weight:700; }
+    .ip-controls { display:flex; align-items:center; justify-content:flex-start; column-gap:48px; row-gap:16px; margin-bottom:32px; flex-wrap:wrap; }
+    .ip-controls .savings-pill { display:inline-flex; align-items:center; gap:8px; height:40px; padding:0 14px; border-radius:999px; background:#eef2f3; color:var(--navy); font-size:16px; font-weight:400; line-height:20.8px; visibility:visible; }
+    .ip-controls .savings-pill.hidden { display:none; }
+    .inproduct-shell .cards-grid { gap:24px; }
+    .ip-card-meta { margin-left:auto; color:#49646f; font-size:14px; line-height:18px; white-space:nowrap; }
+    .inproduct-shell .card { position:relative; min-height:508px; border:1px solid #dadfe2; border-radius:8px; overflow:hidden; }
+    .inproduct-shell .card.plan-plus { min-height:564px; }
+    .inproduct-shell .card.highlighted { border:1px solid #dadfe2; box-shadow:0 4px 16px rgba(0,0,0,.1),0 -1px 4px rgba(0,0,0,.1); }
+    .inproduct-shell .card.plan-plus::before { content:''; position:absolute; inset:0; background:radial-gradient(135% 95% at 4% -6%, rgba(184,232,51,.22) 0%, rgba(184,232,51,.07) 32%, rgba(255,255,255,0) 58%); pointer-events:none; }
+    .inproduct-shell .card.plan-plus::after { content:''; position:absolute; top:14px; right:18px; width:150px; height:84px; background:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='84' viewBox='0 0 150 84'><path d='M12,0 C12.5,6.5 17.5,11.5 24,12 C17.5,12.5 12.5,17.5 12,24 C11.5,17.5 6.5,12.5 0,12 C6.5,11.5 11.5,6.5 12,0 Z' transform='translate(112,2) scale(1.2)' fill='%23B8E833'/><path d='M12,0 C12.5,6.5 17.5,11.5 24,12 C17.5,12.5 12.5,17.5 12,24 C11.5,17.5 6.5,12.5 0,12 C6.5,11.5 11.5,6.5 12,0 Z' transform='translate(86,32) scale(0.62)' fill='%238ab828' opacity='0.75'/><path d='M12,0 C12.5,6.5 17.5,11.5 24,12 C17.5,12.5 12.5,17.5 12,24 C11.5,17.5 6.5,12.5 0,12 C6.5,11.5 11.5,6.5 12,0 Z' transform='translate(132,42) scale(0.5)' fill='%23B8E833' opacity='0.65'/><path d='M12,0 C12.5,6.5 17.5,11.5 24,12 C17.5,12.5 12.5,17.5 12,24 C11.5,17.5 6.5,12.5 0,12 C6.5,11.5 11.5,6.5 12,0 Z' transform='translate(70,6) scale(0.4)' fill='%23B8E833' opacity='0.55'/></svg>") center/contain no-repeat; pointer-events:none; }
+    .inproduct-shell .card > * { position:relative; z-index:1; }
+    .inproduct-shell .card-top { padding:24px 32px 0; }
+    .inproduct-shell .card:not(.highlighted) .card-top { padding:24px 24px 0; }
+    .inproduct-shell .card-name { font-size:24px; font-weight:800; line-height:32px; }
+    .inproduct-shell .badge-rec { background:#eef2f3; color:#344f61; font-size:12px; font-weight:700; line-height:16px; padding:4px 10px; border-radius:999px; }
+    .inproduct-shell .badge-rec.green { background:#e8f5c8; color:#32821c; }
+    .inproduct-shell .card-users-label { display:block; color:var(--navy); font-size:14px; font-weight:700; line-height:18px; margin-top:4px; }
+    .inproduct-shell .card-desc { color:#424E56; font-size:14px; font-weight:400; line-height:17.5px; min-height:36px; margin-top:8px; }
+    .inproduct-shell .card-desc a { color:#424E56; text-decoration:underline; text-underline-offset:2px; }
+    .inproduct-shell .card-price { padding:24px 32px 0; }
+    .inproduct-shell .card:not(.highlighted) .card-price { padding:24px 24px 0; }
+    .inproduct-shell .price-compare { color:#5d757e; font-size:16px; line-height:20px; text-decoration:line-through; text-decoration-thickness:1px; }
+    .inproduct-shell .price-amount { font-size:36px; font-weight:900; line-height:40px; letter-spacing:-.36px; }
+    .inproduct-shell .price-amount.chat-copy { font-size:28px; line-height:36px; letter-spacing:0; }
+    .inproduct-shell .price-mo { font-size:16px; line-height:21px; padding-bottom:4px; }
+    .inproduct-shell .price-note { color:#49646f; margin-top:4px; font-size:14px; line-height:17.5px; }
+    .inproduct-shell .card-cta { padding:24px 32px; order:10; margin-top:auto; }
+    .inproduct-shell .card:not(.highlighted) .card-cta { padding:24px; }
+    .inproduct-shell .btn-trial { height:48px; border-radius:6px; font-size:16px; font-weight:700; line-height:16px; }
+    .inproduct-shell .btn-secondary-plan { width:100%; height:48px; border:1px solid #dadfe2; border-radius:6px; background:#fff; color:var(--primary-green); font-size:16px; font-weight:700; line-height:16px; font-family:inherit; cursor:pointer; }
+    .inproduct-shell .btn-contact-sales-plan { width:100%; height:48px; border:1px solid #dadfe2; border-radius:6px; background:#fff; color:var(--primary-green); font-size:16px; font-weight:700; line-height:16px; font-family:inherit; cursor:pointer; }
+    .inproduct-shell .card-features { padding:16px 32px 24px; }
+    .inproduct-shell .card:not(.highlighted) .card-features { padding:16px 24px 24px; }
+    .inproduct-shell .features-title { color:#012939; font-size:14px; font-weight:700; line-height:17.5px; margin-bottom:10px; }
+    .inproduct-shell .feature { align-items:center; gap:4px; margin-bottom:8px; font-size:14px; color:#424E56; line-height:17.5px; }
+    .inproduct-shell .check { width:24px; height:24px; margin-top:0; }
+    .inproduct-shell .beta-label { display:inline-flex; align-items:center; height:22px; margin-left:8px; padding:0 9px; border-radius:999px; background:#e9eef1; color:#344f61; font-size:12px; font-weight:600; line-height:12px; }
+    .compare-toggle { margin-top:48px; height:72px; width:100%; border:1px solid #e0e5e8; border-radius:10px; background:#fff; display:flex; align-items:center; justify-content:space-between; padding:0 24px; color:#233d48; font-size:14px; font-weight:800; font-family:inherit; cursor:pointer; }
+    .compare-toggle:hover { border-color:#c8d2d6; }
+    .compare-toggle .compare-chevron { color:var(--primary-green); transition:transform .2s ease; font-size:18px; line-height:1; }
+    .compare-toggle.open .compare-chevron { transform:rotate(180deg); }
+    .compare-chart { display:none; margin-top:24px; border:1px solid #e0e5e8; border-radius:10px; background:#fff; overflow:hidden; }
+    .compare-chart.open { display:block; }
+    .compare-table { width:100%; overflow-x:auto; }
+    .compare-grid { display:grid; min-width:760px; }
+    .compare-cell { min-height:56px; padding:16px 20px; border-left:1px solid #e0e5e8; color:#233d48; font-size:14px; line-height:18px; display:flex; align-items:center; justify-content:center; text-align:center; }
+    .compare-cell:first-child { border-left:0; justify-content:flex-start; text-align:left; }
+    .compare-head { min-height:116px; align-items:flex-start; flex-direction:column; gap:10px; color:var(--navy); font-size:20px; font-weight:900; }
+    .compare-head:first-child { justify-content:flex-end; }
+    .compare-feature-name { justify-content:space-between; gap:12px; font-weight:500; }
+    .compare-section-title { min-height:64px; align-items:flex-end; justify-content:flex-start; color:var(--navy); font-size:18px; font-weight:900; }
+    .compare-check { color:var(--primary-green); font-size:24px; line-height:1; }
+    .compare-dash { color:#49646f; font-weight:800; }
+    .compare-addon { color:var(--navy); font-weight:800; }
+    .compare-plan-button { width:100%; height:32px; border:1px solid #dadfe2; border-radius:6px; background:#fff; color:var(--primary-green); font-family:inherit; font-size:14px; font-weight:800; }
+    .ip-section { margin-top:64px; }
+    .ip-section.plus-section { margin-top:64px; background:#f9f8f6; border-radius:24px; padding:32px; }
+    .ip-section h2 { margin:0 0 32px; color:var(--navy); font-size:24px; line-height:32px; font-weight:900; }
+    .feature-tile-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; }
+    .core-feature-tile { min-height:148px; padding-top:16px; color:#424E56; }
+    .feature-icon { width:36px; height:36px; color:var(--primary-green); margin-bottom:16px; display:flex; align-items:center; justify-content:center; font-size:28px; line-height:1; }
+    .feature-tile-title { color:var(--navy); font-size:20px; font-weight:800; line-height:24px; margin-bottom:16px; }
+    .feature-tile-copy { color:#424E56; font-size:14px; line-height:18px; }
+    .plus-feature-card { overflow:hidden; border-radius:8px; background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.1),0 4px 12px rgba(0,0,0,.05); }
+    .plus-feature-visual { height:350px; background:#fff; padding:0; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+    .plus-feature-visual img { width:100%; height:100%; object-fit:cover; border-radius:4px; }
+    .plus-feature-body { min-height:140px; padding:24px; }
+    .plus-feature-title { display:flex; align-items:center; gap:8px; color:var(--navy); font-size:20px; font-weight:800; line-height:24px; margin-bottom:8px; }
+    .plus-feature-copy { color:#424E56; font-size:16px; line-height:21px; }
+    .faq-section { margin-top:64px; display:grid; grid-template-columns:404px 1fr; gap:148px; }
+    .faq-section h2 { margin:0; color:var(--navy); font-size:24px; line-height:32px; font-weight:900; }
+    .faq-list { display:flex; flex-direction:column; gap:24px; }
+    .faq-item { display:flex; justify-content:space-between; align-items:flex-start; padding-bottom:24px; border-bottom:1px solid #dae0e2; color:var(--navy); font-size:16px; font-weight:800; line-height:18px; }
+    .faq-item:last-child { border-bottom:none; }
+    @media (max-width: 1100px) { .inproduct-shell { padding-left:0; } .app-side-nav, .app-top-bar { display:none; } .feature-tile-grid { grid-template-columns:1fr; } .faq-section { grid-template-columns:1fr; gap:24px; } }
+
+    /* Smooth screen transitions */
+    .screen { opacity:0; transition:opacity .25s ease; pointer-events:none; }
+    .screen.active { opacity:1; pointer-events:auto; }
+
+    /* Wizard step transitions */
+    @keyframes stepIn  { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes stepOut { from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(-10px)} }
+    .fade-in  { animation:stepIn .28s cubic-bezier(.25,.46,.45,.94) forwards; }
+    .fade-out { animation:stepOut .18s ease forwards; }
+
+    /* Prevent layout jump during animation */
+    #wizard-card { will-change:contents; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════ SCREEN 1: PUBLIC PRICING ═══════════ -->
+<div id="screen-pricing" class="screen active">
+  <div class="hero">
+    <p class="hero-title">Try Jobber for free now</p>
+    <p class="hero-sub">Put Jobber to work. No credit card required.</p>
+  </div>
+  <div class="hero-rip"></div>
+  <div class="pricing-section">
+    <div class="controls-bar">
+      <div class="control-group">
+        <span class="control-label">Team size</span>
+        <div class="team-size-options" data-team-control="p1">
+          <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+            <span data-team-label="p1">2-5 members</span>
+            <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="team-size-menu" role="listbox" aria-label="Team size">
+            <button class="team-size-option" type="button" data-users="1">Just me</button>
+            <button class="team-size-option" type="button" data-users="5">2-5 members</button>
+            <button class="team-size-option" type="button" data-users="10">6-10 members</button>
+            <button class="team-size-option" type="button" data-users="15">11-15 members</button>
+            <button class="team-size-option" type="button" data-users="16">16 or more</button>
+          </div>
+        </div>
+      </div>
+      <div class="control-group billing-group">
+        <span class="control-label">Billing</span>
+        <div class="billing-wrapper" id="p1-bwrap">
+          <div class="billing-toggle">
+            <button class="billing-opt" id="p1-opt-m">
+              <span id="p1-mlabel">Monthly</span>
+              <svg class="chevron" id="p1-chev" viewBox="0 0 14 14" fill="none"><path d="M2.5 4.5L7 9.5L11.5 4.5" stroke="#012939" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <button class="billing-opt active" id="p1-opt-a">Annual</button>
+          </div>
+          <div class="monthly-dropdown" id="p1-mdd">
+            <div class="dropdown-opt selected" id="p1-dd1">1 year commitment</div>
+            <div class="dropdown-opt" id="p1-dd2">No commitment</div>
+          </div>
+        </div>
+      </div>
+      <span class="savings-pill" id="p1-savings">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5V12L12 20L20 12L13.5 5.5H4Z" stroke="#012939" stroke-width="2" stroke-linejoin="round"/><circle cx="10" cy="10" r="1.6" fill="#012939"/></svg>
+        <span>Best value</span>
+      </span>
+    </div>
+
+    <div class="cards-grid" id="p1-cards-grid">
+      <!-- Plus -->
+      <div class="card" id="p1-card-plus">
+        <div class="card-top">
+          <div class="card-name-row"><div class="card-name">Plus</div><span class="badge-rec" id="p1-badge-plus" style="display:none">Recommended</span></div>
+          <div class="card-users-row"><div class="card-users-label" id="p1-plus-users">Includes 5 users</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are team members who log into Jobber. Extra users are $29/mo each. Need 15+? <a href="#">Contact us</a></span></span></div>
+          <div class="card-desc">For teams who want to scale complex operations with greater control across jobs, crews, and revenue.</div>
+        </div>
+        <div class="card-price">
+          <div class="price-compare" id="p1-plus-compare"></div>
+          <div class="price-row"><span class="price-amount" id="p1-plus-price">$399</span><span class="price-mo" id="p1-plus-mo">/mo</span></div>
+          <div class="price-note" id="p1-plus-note">Billed annually</div>
+        </div>
+        <div class="card-cta" id="p1-plus-cta">
+          <button class="btn-contact">Contact Sales</button>
+          <a class="why-link" href="#" aria-label="Why Plus?">
+            <svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M7.25 5.75L12 9L7.25 12.25V5.75Z" fill="currentColor"/></svg>
+            <span>Why Plus?</span>
+          </a>
+        </div>
+        <div class="card-features">
+          <div class="features-title">All Grow features, plus:</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Jobber Marketing Suite ($79 value)</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Book leads with Jobber's Receptionist ($99 value)</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Track your leads with Pipeline ($49 value)</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Onboarding with a dedicated specialist</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Premium Support ($99 value)</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Guided API walkthrough for custom integrations</div>
+        </div>
+      </div>
+      <!-- Grow -->
+      <div class="card" id="p1-card-grow">
+        <div class="card-top">
+          <div class="card-name-row"><div class="card-name">Grow</div><span class="badge-rec" id="p1-badge-grow" style="display:none">Recommended</span></div>
+          <div class="card-users-row"><div class="card-users-label" id="p1-grow-users">Includes 1 user</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are team members who log into Jobber. Extra users are $29/mo each. Need 15+? <a href="#">Contact us</a></span></span></div>
+          <div class="card-desc">For contractors who want to win bigger jobs and grow more profitably.</div>
+        </div>
+        <div class="card-price">
+          <div class="price-compare" id="p1-grow-compare"></div>
+          <div class="price-row"><span class="price-amount" id="p1-grow-price">$149</span><span class="price-mo" id="p1-grow-mo">/mo</span></div>
+          <div class="price-note" id="p1-grow-note">Billed annually</div>
+        </div>
+        <div class="card-cta" id="p1-grow-cta">
+          <button class="btn-trial" onclick="goToWizard()">Try Jobber For Free</button>
+          <div class="cta-spacer"></div>
+        </div>
+        <div class="card-features">
+          <div class="features-title">All Connect features, plus:</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Access advanced quote customizations</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Add optional line items</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Track time automatically</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Track costs with job costing</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Connect with customers through two-way SMS</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Build custom workflow automations</div>
+        </div>
+      </div>
+      <!-- Connect -->
+      <div class="card" id="p1-card-connect">
+        <div class="card-top">
+          <div class="card-name-row"><div class="card-name">Connect</div><span class="badge-rec" id="p1-badge-connect">Recommended</span></div>
+          <div class="card-users-row"><div class="card-users-label" id="p1-connect-users">Includes 1 user</div><span class="user-tooltip" tabindex="0">?<span class="user-tooltip-bubble">Users are team members who log into Jobber. Extra users are $29/mo each. Need 15+? <a href="#">Contact us</a></span></span></div>
+          <div class="card-desc">For pros who want to automate tasks and turn repeat work into more 5-star visits.</div>
+        </div>
+        <div class="card-price">
+          <div class="price-compare" id="p1-connect-compare"></div>
+          <div class="price-row"><span class="price-amount" id="p1-connect-price">$99</span><span class="price-mo" id="p1-connect-mo">/mo</span></div>
+          <div class="price-note" id="p1-connect-note">Billed annually</div>
+        </div>
+        <div class="card-cta" id="p1-connect-cta">
+          <button class="btn-trial" onclick="goToWizard()">Try Jobber For Free</button>
+          <div class="cta-spacer"></div>
+        </div>
+        <div class="card-features">
+          <div class="features-title">All Core features, plus:</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Send automated reminders</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Collect payments automatically</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Document work on job forms</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Automate quote and invoice follow-ups</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Connect QuickBooks Online</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Track time and expenses</div>
+        </div>
+      </div>
+      <!-- Core -->
+      <div class="card" id="p1-card-core">
+        <div class="card-top">
+          <div class="card-name-row"><div class="card-name">Core</div></div>
+          <div class="card-users-label">For 1 user</div>
+          <div class="card-desc">For the pro who wants to build and grow their business on one easy-to-use platform</div>
+        </div>
+        <div class="card-price">
+          <div class="price-compare" id="p1-core-compare"></div>
+          <div class="price-row"><span class="price-amount" id="p1-core-price">$29</span><span class="price-mo">/mo</span></div>
+          <div class="price-note" id="p1-core-note">Billed annually</div>
+        </div>
+        <div class="card-cta">
+          <button class="btn-trial" onclick="goToWizard()">Try Jobber For Free</button>
+          <div class="cta-spacer"></div>
+        </div>
+        <div class="card-features">
+          <div class="features-title">Key features:</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Book and schedule jobs online</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Send professional quotes</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Send invoices and receive online payments</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Create a professional website</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Reporting</div>
+          <div class="feature"><svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Access the app marketplace</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cards-footer">
+      <button class="wizard-link" onclick="goToWizard()">Can't find the right plan? Try the plan wizard →</button>
+      <button class="btn-see-all">See All Feature Comparison</button>
+      <div class="disclaimer">All prices in USD. Subscription plan prices exclude sales tax where applicable. <a href="#">FAQ below.</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SCREEN 2: WIZARD ═══════════ -->
+<div id="screen-wizard" class="screen">
+  <div class="wizard-screen">
+    <div class="wizard-header">
+      <div class="wizard-logo">
+        <div class="wizard-logo-mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1.5" fill="white"/><rect x="13" y="3" width="8" height="8" rx="1.5" fill="white"/><rect x="3" y="13" width="8" height="8" rx="1.5" fill="white"/><rect x="13" y="13" width="8" height="8" rx="1.5" fill="white"/></svg></div>
+        <span class="wizard-logo-text">Jobber</span>
+      </div>
+      <div class="wizard-progress-wrap">
+        <div class="wizard-progress-label" id="wz-step-label">Step 1 of 5</div>
+        <div class="wizard-progress-bar"><div class="wizard-progress-fill" id="wz-progress" style="width:20%"></div></div>
+      </div>
+    </div>
+    <div class="wizard-card" id="wizard-card"></div>
+    <aside class="wizard-visual" id="wizard-visual" aria-hidden="true">
+      <div class="wizard-visual-content" id="wizard-visual-content"></div>
+    </aside>
+  </div>
+</div>
+
+<!-- ═══════════ SCREEN 3: IN-PRODUCT ═══════════ -->
+<div id="screen-inproduct" class="screen">
+  <div class="inproduct-shell">
+    <aside class="app-side-nav" aria-label="Main navigation">
+      <div class="side-logo"><img src="https://www.figma.com/api/mcp/asset/d76c7c6d-c7d0-41b7-b888-65ed53fb28b0" alt="Jobber"></div>
+      <div class="side-item"><span>＋</span><span>Create</span></div>
+      <div class="side-item"><span>⌂</span><span>Home</span></div>
+      <div class="side-item"><span>□</span><span>Schedule</span></div>
+      <div class="side-divider"></div>
+      <div class="side-item"><span>◧</span><span>Clients</span></div>
+      <div class="side-item"><span>✉</span><span>Requests</span></div>
+      <div class="side-item"><span>⌕</span><span>Quotes</span></div>
+      <div class="side-item"><span>⚒</span><span>Jobs</span></div>
+      <div class="side-item"><span>▤</span><span>Invoices</span></div>
+      <div class="side-divider"></div>
+      <div class="side-item"><span>⚑</span><span>Marketing</span></div>
+      <div class="side-item"><span>▣</span><span>Reports</span></div>
+      <div class="side-item"><span>▧</span><span>Expenses</span></div>
+      <div class="side-item"><span>◷</span><span>Timesheets</span></div>
+      <div class="side-item"><span>⌘</span><span>Apps</span></div>
+    </aside>
+    <div class="app-top-bar">
+      <div class="top-company">ABC Landscaping</div>
+      <div class="top-actions"><div class="top-search">⌕ <span>Search</span></div><span>◉</span><span>▤</span><span>♢</span></div>
+    </div>
+    <div class="inproduct-topbar">
+      <div class="ip-logo">
+        <div class="ip-logo-mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="8" height="8" rx="1.5" fill="#012939"/><rect x="13" y="3" width="8" height="8" rx="1.5" fill="#012939"/><rect x="3" y="13" width="8" height="8" rx="1.5" fill="#012939"/><rect x="13" y="13" width="8" height="8" rx="1.5" fill="#012939"/></svg></div>
+        <span class="ip-logo-text">Jobber</span>
+      </div>
+      <button class="ip-back-btn" onclick="goToWizard(true)">← Edit preferences</button>
+      <button class="ip-back-btn" onclick="restartFlow()" style="margin-left:8px;">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5a4.5 4.5 0 1 1 1.1 2.95" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 9.5V6.5H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Start over
+      </button>
+    </div>
+    <div class="ip-content">
+      <div class="ip-header">
+        <div class="ip-badge"><span>✨</span><span id="ip-badge-text">Personalized for you</span></div>
+        <div class="ip-title">Choose your plan</div>
+        <div class="ip-subtitle">Start by choosing the plan and team size that fit your business. You can customize your subscription with add-ons before checkout.</div>
+      </div>
+      <div class="rec-banner"><div class="rec-banner-icon">💡</div><div class="rec-banner-text" id="ip-rec-text"></div></div>
+      <div id="ip-over15" style="display:none">
+        <div class="over15-banner">
+          <div class="over15-icon">ℹ️</div>
+          <div class="over15-text"><strong>Need more than 15 seats?</strong> No problem — you can add more users at any time after purchase. Or if you'd prefer a hand getting set up, our Customer Success team is ready to help. Give them a call at <a href="tel:18551234567">1-855-123-4567</a>.</div>
+        </div>
+      </div>
+      <div class="ip-controls">
+        <div class="control-group">
+          <span class="control-label">Team size</span>
+          <div class="team-size-options" data-team-control="ip">
+            <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span data-team-label="ip">2-5 members</span>
+              <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="team-size-menu" role="listbox" aria-label="Team size"></div>
+          </div>
+        </div>
+        <div class="control-group billing-group">
+          <span class="control-label">Billing</span>
+          <div class="billing-wrapper" id="ip-bwrap">
+            <div class="billing-toggle">
+              <button class="billing-opt" id="ip-opt-m">
+                <span id="ip-mlabel">Monthly</span>
+                <svg class="chevron" id="ip-chev" viewBox="0 0 14 14" fill="none"><path d="M2.5 4.5L7 9.5L11.5 4.5" stroke="#012939" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <button class="billing-opt active" id="ip-opt-a">Annual</button>
+            </div>
+            <div class="monthly-dropdown" id="ip-mdd">
+              <div class="dropdown-opt selected" id="ip-dd1">1 year commitment</div>
+              <div class="dropdown-opt" id="ip-dd2">No commitment</div>
+            </div>
+          </div>
+        </div>
+        <span class="savings-pill" id="ip-savings">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5V12L12 20L20 12L13.5 5.5H4Z" stroke="#012939" stroke-width="2" stroke-linejoin="round"/><circle cx="10" cy="10" r="1.6" fill="#012939"/></svg>
+          <span>Best value</span>
+        </span>
+        <div class="ip-card-meta">Prices in $USD</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:6px;" id="ip-badge-row"></div>
+      <div class="cards-grid" id="ip-cards-grid"></div>
+      <button class="compare-toggle" id="compare-toggle" type="button" aria-expanded="false" aria-controls="compare-chart">
+        <span>Compare all features</span>
+        <span class="compare-chevron" aria-hidden="true">⌄</span>
+      </button>
+      <div class="compare-chart" id="compare-chart">
+        <div class="compare-table" id="compare-table" aria-label="Plan feature comparison"></div>
+      </div>
+
+      <section class="ip-section core-section">
+        <h2>What’s included in every plan, so you don’t miss out</h2>
+        <div class="feature-tile-grid">
+          <div class="core-feature-tile"><div class="feature-icon">▦</div><div class="feature-tile-title">Scheduling</div><div class="feature-tile-copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac maximus urna, quis vulputate turpis.</div></div>
+          <div class="core-feature-tile"><div class="feature-icon">✎</div><div class="feature-tile-title">Quotes</div><div class="feature-tile-copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac maximus urna, quis vulputate turpis.</div></div>
+          <div class="core-feature-tile"><div class="feature-icon">▤</div><div class="feature-tile-title">Invoices</div><div class="feature-tile-copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac maximus urna, quis vulputate turpis.</div></div>
+          <div class="core-feature-tile"><div class="feature-icon">◉</div><div class="feature-tile-title">Client manager</div><div class="feature-tile-copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac maximus urna, quis vulputate turpis.</div></div>
+          <div class="core-feature-tile"><div class="feature-icon">▣</div><div class="feature-tile-title">Reporting</div><div class="feature-tile-copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac maximus urna, quis vulputate turpis.</div></div>
+          <div class="core-feature-tile"><div class="feature-icon">▥</div><div class="feature-tile-title">Credit card processing</div><div class="feature-tile-copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi ac maximus urna, quis vulputate turpis.</div></div>
+        </div>
+      </section>
+
+      <section class="ip-section plus-section">
+        <h2>Supercharge your business with these add-ons</h2>
+        <div class="feature-tile-grid">
+          <div class="plus-feature-card"><div class="plus-feature-visual"><img src="addon-marketing-suite.png" alt="Marketing Suite preview"></div><div class="plus-feature-body"><div class="plus-feature-title">Marketing Suite <span>→</span></div><div class="plus-feature-copy">Provides you with effective tools to win more work, grow your revenue, increase your client base, and build client loyalty</div></div></div>
+          <div class="plus-feature-card"><div class="plus-feature-visual"><img src="addon-receptionist.png" alt="Receptionist preview"></div><div class="plus-feature-body"><div class="plus-feature-title">Receptionist <span>→</span></div><div class="plus-feature-copy">Round-the-clock service by phone or text.</div></div></div>
+          <div class="plus-feature-card"><div class="plus-feature-visual"><img src="addon-pipeline.png" alt="Pipeline preview"></div><div class="plus-feature-body"><div class="plus-feature-title">Pipeline <span>→</span></div><div class="plus-feature-copy">All your opportunities, all in one place</div></div></div>
+        </div>
+      </section>
+
+      <section class="faq-section">
+        <h2>What people are frequently asking</h2>
+        <div class="faq-list">
+          <div class="faq-item"><span>Are there any commitments of contracts?</span><span>⌄</span></div>
+          <div class="faq-item"><span>Can I change my plans at any time?</span><span>⌄</span></div>
+          <div class="faq-item"><span>Do you have a sales team?</span><span>⌄</span></div>
+        </div>
+      </section>
+
+      <div class="cards-footer">
+        <div class="disclaimer">All prices in USD. Subscription plan prices exclude sales tax where applicable.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════
+// PRICING ENGINE
+// ═══════════════════════════════════════════════════
+// Corrected tiers per spec. Keys: annual, acbm (1yr monthly), monthly (no commitment)
+const TIERS = {
+  core:    [{max:1,  annual:29,  acbm:39,  monthly:49}],
+  connect: [{max:1,  annual:99,  acbm:119, monthly:139},
+            {max:5,  annual:149, acbm:169, monthly:199},
+            {max:10, annual:229, acbm:259, monthly:299},
+            {max:15, annual:299, acbm:339, monthly:399}],
+  grow:    [{max:1,  annual:149, acbm:169, monthly:199},
+            {max:5,  annual:229, acbm:259, monthly:299},
+            {max:10, annual:299, acbm:349, monthly:399},
+            {max:15, annual:399, acbm:429, monthly:499}],
+  plus:    [{max:5,  annual:399, acbm:439, monthly:499},
+            {max:10, annual:449, acbm:499, monthly:599},
+            {max:15, annual:529, acbm:599, monthly:699}],
+};
+const PER_EXTRA = 29;
+
+// Get price for a plan/users/billing. capAt15=true for Screen 3 (no over-15 add-ons)
+function getPrice(plan, users, billing, capAt15) {
+  if (plan === 'core' && users > 1) return null;
+  const tiers = TIERS[plan];
+  let tier = tiers[tiers.length - 1];
+  for (const t of tiers) { if (users <= t.max) { tier = t; break; } }
+  let price = tier[billing];
+  if (!capAt15 && users > 15) price += (users - 15) * PER_EXTRA;
+  return price;
+}
+
+// Screen 1 only: get the tier ceiling for the "Includes X users" label
+function tierCeiling(plan, users) {
+  if (plan === 'core') return 1;
+  const tiers = TIERS[plan];
+  for (const t of tiers) { if (users <= t.max) return t.max; }
+  return users; // over max tier
+}
+
+// Screen 1: recommended badge (1-4 = connect, 5-9 = grow, 10+ = plus)
+function p1RecPlan(u) {
+  if (u >= 5) return 'plus';
+  return 'connect';
+}
+
+function billingLabel(b) {
+  return b === 'annual' ? 'Billed annually' : b === 'acbm' ? '1 year commitment' : 'Billed monthly';
+}
+function savingsHTML(b) {
+  return b === 'annual'
+    ? '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5V12L12 20L20 12L13.5 5.5H4Z" stroke="#012939" stroke-width="2" stroke-linejoin="round"/><circle cx="10" cy="10" r="1.6" fill="#012939"/></svg><span>Best value</span>'
+    : '';
+}
+function marketingSavingsHTML(b) {
+  return b === 'annual'
+    ? '<span class="promo-strong">Save up to 25%</span><span> with annual billing</span>'
+    : '';
+}
+function anim(el, txt) {
+  el.classList.add('animating');
+  setTimeout(() => { el.textContent = txt; el.classList.remove('animating'); }, 110);
+}
+
+const CONTACT_CTA = `<button class="btn-contact">Contact Sales</button><div class="cta-spacer"></div>`;
+const TRIAL_CTA   = `<button class="btn-trial" onclick="goToWizard()">Try Jobber For Free</button><div class="cta-spacer"></div>`;
+const PLUS_CTA    = `<button class="btn-contact">Contact Sales</button><a class="why-link" href="#" aria-label="Why Plus?"><svg viewBox="0 0 18 18" fill="none" aria-hidden="true"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M7.25 5.75L12 9L7.25 12.25V5.75Z" fill="currentColor"/></svg><span>Why Plus?</span></a>`;
+
+// ═══════════════════════════════════════════════════
+// SCREEN 1
+// ═══════════════════════════════════════════════════
+
+function updateTeamChoice(scope, users) {
+  let activeLabel = '';
+  document.querySelectorAll(`[data-team-control="${scope}"] .team-size-option`).forEach(btn => {
+    const val = parseInt(btn.dataset.users, 10);
+    const isActive = users === val;
+    btn.classList.toggle('active', isActive);
+    if (isActive) activeLabel = btn.textContent.trim();
+  });
+  const label = document.querySelector(`[data-team-label="${scope}"]`);
+  if (label && activeLabel) label.textContent = activeLabel;
+}
+function closeTeamDropdown(scope) {
+  const control = document.querySelector(`[data-team-control="${scope}"]`);
+  if (!control) return;
+  control.classList.remove('open');
+  const trigger = control.querySelector('.team-size-trigger');
+  if (trigger) trigger.setAttribute('aria-expanded', 'false');
+}
+function toggleTeamDropdown(scope) {
+  const control = document.querySelector(`[data-team-control="${scope}"]`);
+  if (!control) return;
+  const isOpen = control.classList.toggle('open');
+  const trigger = control.querySelector('.team-size-trigger');
+  if (trigger) trigger.setAttribute('aria-expanded', String(isOpen));
+}
+let p1N = 5, p1B = 'annual', p1MT = 'acbm', p1DD = false;
+
+// Marketing strikethrough: show the regular monthly price struck through when a
+// discounted billing option (annual / 1-yr monthly) is selected.
+function setP1Compare(id, plan, u, isChat) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (isChat || p1B === 'monthly') { el.textContent = ''; return; }
+  const seats = plan === 'core' ? 1 : u;
+  const monthly = getPrice(plan, seats, 'monthly', false);
+  el.textContent = monthly ? `$${monthly}/mo` : '';
+}
+
+function p1Update() {
+  const u = p1N;
+  const isChat = u >= 16;
+  updateTeamChoice('p1', u);
+
+  // Billing UI
+  document.getElementById('p1-opt-m').classList.toggle('active', p1B !== 'annual');
+  document.getElementById('p1-opt-a').classList.toggle('active', p1B === 'annual');
+  document.getElementById('p1-dd1').classList.toggle('selected', p1MT === 'acbm');
+  document.getElementById('p1-dd2').classList.toggle('selected', p1MT === 'monthly');
+  document.getElementById('p1-mlabel').textContent = (p1B !== 'annual' && p1MT === 'acbm') ? 'Monthly for 1 yr' : 'Monthly';
+  const sv = document.getElementById('p1-savings');
+  sv.innerHTML = marketingSavingsHTML(p1B); sv.classList.toggle('hidden', !marketingSavingsHTML(p1B));
+
+  document.getElementById('p1-cards-grid').classList.toggle('three-cards', u === 1 || u >= 5);
+  document.getElementById('p1-card-plus').style.display = u === 1 ? 'none' : '';
+  document.getElementById('p1-card-core').style.display = u >= 5 ? 'none' : '';
+
+  // Recommended badge
+  const rec = p1RecPlan(u);
+  document.getElementById('p1-badge-plus').style.display    = rec==='plus'    && u !== 1 ? '' : 'none';
+  document.getElementById('p1-badge-grow').style.display    = rec==='grow'    ? '' : 'none';
+  document.getElementById('p1-badge-connect').style.display = rec==='connect' ? '' : 'none';
+
+  // PLUS
+  const plusCeil = Math.max(tierCeiling('plus', u), 5);
+  document.getElementById('p1-plus-users').textContent = `Includes ${plusCeil} users`;
+  setP1Compare('p1-plus-compare','plus',u,isChat);
+  if (isChat) {
+    anim(document.getElementById('p1-plus-price'), "Let's chat");
+    document.getElementById('p1-plus-mo').style.display = 'none';
+    document.getElementById('p1-plus-note').textContent = '';
+    document.getElementById('p1-plus-cta').innerHTML = PLUS_CTA;
+  } else {
+    anim(document.getElementById('p1-plus-price'), '$'+getPrice('plus',u,p1B,false));
+    document.getElementById('p1-plus-mo').style.display = '';
+    document.getElementById('p1-plus-note').textContent = billingLabel(p1B);
+    document.getElementById('p1-plus-cta').innerHTML = PLUS_CTA;
+  }
+
+  // GROW
+  const growCeil = Math.max(tierCeiling('grow', u), 1);
+  document.getElementById('p1-grow-users').textContent = growCeil === 1 ? 'Includes 1 user' : `Includes ${growCeil} users`;
+  setP1Compare('p1-grow-compare','grow',u,isChat);
+  if (isChat) {
+    anim(document.getElementById('p1-grow-price'), "Let's chat");
+    document.getElementById('p1-grow-mo').style.display = 'none';
+    document.getElementById('p1-grow-note').textContent = '';
+    document.getElementById('p1-grow-cta').innerHTML = CONTACT_CTA;
+  } else {
+    anim(document.getElementById('p1-grow-price'), '$'+getPrice('grow',u,p1B,false));
+    document.getElementById('p1-grow-mo').style.display = '';
+    document.getElementById('p1-grow-note').textContent = billingLabel(p1B);
+    document.getElementById('p1-grow-cta').innerHTML = TRIAL_CTA;
+  }
+
+  // CONNECT
+  const connectCeil = Math.max(tierCeiling('connect', u), 1);
+  document.getElementById('p1-connect-users').textContent = connectCeil === 1 ? 'Includes 1 user' : `Includes ${connectCeil} users`;
+  setP1Compare('p1-connect-compare','connect',u,isChat);
+  if (isChat) {
+    anim(document.getElementById('p1-connect-price'), "Let's chat");
+    document.getElementById('p1-connect-mo').style.display = 'none';
+    document.getElementById('p1-connect-note').textContent = '';
+    document.getElementById('p1-connect-cta').innerHTML = CONTACT_CTA;
+  } else {
+    anim(document.getElementById('p1-connect-price'), '$'+getPrice('connect',u,p1B,false));
+    document.getElementById('p1-connect-mo').style.display = '';
+    document.getElementById('p1-connect-note').textContent = billingLabel(p1B);
+    document.getElementById('p1-connect-cta').innerHTML = TRIAL_CTA;
+  }
+
+  // CORE
+  const coreCard = document.getElementById('p1-card-core');
+  if (u > 1 && u < 5) { coreCard.classList.add('greyed'); }
+  else {
+    coreCard.classList.remove('greyed');
+    if (u < 5) {
+      anim(document.getElementById('p1-core-price'), '$'+getPrice('core',1,p1B,false));
+      document.getElementById('p1-core-note').textContent = billingLabel(p1B);
+      setP1Compare('p1-core-compare','core',u,isChat);
+    }
+  }
+
+  // "Built for your team size" replaces the seat count when contacting sales (16+)
+  ['p1-plus-users','p1-grow-users','p1-connect-users'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const tip = el.parentElement.querySelector('.user-tooltip');
+    if (isChat) {
+      el.textContent = 'Built for your team size';
+      if (tip) tip.style.display = 'none';
+    } else if (tip) {
+      tip.style.display = '';
+    }
+  });
+}
+
+document.querySelector('[data-team-control="p1"]').addEventListener('click', e => {
+  const trigger = e.target.closest('.team-size-trigger');
+  if (trigger) {
+    e.stopPropagation();
+    toggleTeamDropdown('p1');
+    return;
+  }
+  const btn = e.target.closest('.team-size-option');
+  if (btn) {
+    p1N = parseInt(btn.dataset.users, 10);
+    WA.empCount = p1N;
+    closeTeamDropdown('p1');
+    p1Update();
+  }
+});
+document.getElementById('p1-opt-a').addEventListener('click', () => { p1B='annual'; p1cDD(); p1Update(); });
+document.getElementById('p1-opt-m').addEventListener('click', e => { e.stopPropagation(); if(p1DD){p1cDD();}else{p1oDD();p1B=p1MT;p1Update();} });
+document.getElementById('p1-dd1').addEventListener('click', e => { e.stopPropagation(); p1MT='acbm'; p1B='acbm'; p1cDD(); p1Update(); });
+document.getElementById('p1-dd2').addEventListener('click', e => { e.stopPropagation(); p1MT='monthly'; p1B='monthly'; p1cDD(); p1Update(); });
+function p1oDD(){ p1DD=true;  document.getElementById('p1-mdd').classList.add('open'); document.getElementById('p1-chev').classList.add('open'); }
+function p1cDD(){ p1DD=false; document.getElementById('p1-mdd').classList.remove('open'); document.getElementById('p1-chev').classList.remove('open'); }
+document.addEventListener('click', e => { if(p1DD&&!document.getElementById('p1-bwrap').contains(e.target))p1cDD(); if(!e.target.closest('[data-team-control="p1"]'))closeTeamDropdown('p1'); });
+p1Update();
+
+// ═══════════════════════════════════════════════════
+// WIZARD DATA
+// ═══════════════════════════════════════════════════
+const WA = { industry:null, empCount:1, revenue:null, years:null, primaryGoal:null, secondaryGoals:[], otherGoal:'' };
+const PLAN_RANK  = {core:0,connect:1,grow:2,plus:3};
+const PLAN_NAMES = ['core','connect','grow','plus'];
+
+const IND_PLAN = {
+  'Bin Cleaning':'core','Carpet Cleaning':'connect','Commercial Cleaning':'grow',
+  'Pressure Washing Service':'connect','Residential Cleaning':'connect','Window Washing':'connect',
+  'Arborist / Tree Care':'connect','Landscaping Contractor':'grow','Lawn Care & Lawn Maintenance':'connect',
+  'Computers & IT':'grow','Home Theater':'grow','Security and Alarm':'grow',
+  'Construction & Contracting':'grow','Electrical Contractor':'grow','HVAC':'grow',
+  'Locksmith':'connect','Mechanical Service':'grow','Plumbing':'grow',
+  'Appliance Repair':'connect','Flooring Service':'grow','Handyman':'grow',
+  'Junk Removal':'connect','Painting':'connect','Pest Control':'grow',
+  'Pool and Spa Service':'connect','Renovations':'grow','Roofing Service':'grow',
+  'Snow Removal':'connect','Other':'core'
+};
+
+// Discrete employee count → plan
+function empPlan(n) {
+  if (n >= 11) return 'plus';
+  if (n >= 4)  return 'grow';
+  if (n >= 2)  return 'connect';
+  return 'core';
+}
+
+const REV_PLAN = {
+  '$0 - $50,000':'core','$50,000 - $150,000':'connect','$150,000 - $500,000':'grow',
+  '$500,000 - $1,000,000':'plus','$1,000,000 - $2,000,000':'plus','$2,000,000+':'plus',"I'd prefer not to say":'core'
+};
+const YRS_PLAN = {'<1 year':'core','1-2 years':'core','3-5 years':'core','6-10 years':'core','10+ years':'core'};
+const SEC_PLAN = {
+  'Sending professional quotes':'core','Attracting more clients':'core','Getting approvals and deposits':'connect',
+  'Letting clients pay online':'core','Managing client information':'core','Improving organization':'connect',
+  'Scheduling jobs efficiently':'core','Capturing information on-site':'connect','Managing your team better':'plus',
+  'Planning smarter routes':'connect','Automating admin tasks':'grow','Getting more job requests':'core',
+  'Quotes that win work':'core','Never missing new leads':'core','Achieving more repeat business':'core','Something else':'core'
+};
+const PG_SEC = {
+  'I want my business to look as professional as my work':['Sending professional quotes','Attracting more clients','Getting approvals and deposits','Letting clients pay online','Managing client information'],
+  'I want to feel in control, not like my business is running me':['Improving organization','Scheduling jobs efficiently','Capturing information on-site','Managing your team better','Planning smarter routes','Automating admin tasks'],
+  'I want to win more jobs, but without the time consuming admin':['Getting more job requests','Quotes that win work','Attracting more clients','Never missing new leads','Achieving more repeat business'],
+  "I'm not sure yet, just exploring":['Sending professional quotes','Scheduling jobs efficiently','Getting more job requests','Something else']
+};
+const PG = [
+  {icon:'🏆',title:'I want my business to look as professional as my work',desc:'Stand out with polished quotes, online booking, and a great client experience.'},
+  {icon:'📋',title:'I want to feel in control, not like my business is running me',desc:'Get organized, schedule smarter, and automate the admin that slows you down.'},
+  {icon:'📈',title:'I want to win more jobs, but without the time consuming admin',desc:'More leads, faster quotes, and follow-ups that happen automatically.'},
+  {icon:'🔍',title:"I'm not sure yet, just exploring",desc:"No problem — we'll help you discover the tools that matter most."}
+];
+const INDS = ['Bin Cleaning','Carpet Cleaning','Commercial Cleaning','Pressure Washing Service','Residential Cleaning','Window Washing','Arborist / Tree Care','Landscaping Contractor','Lawn Care & Lawn Maintenance','Computers & IT','Home Theater','Security and Alarm','Construction & Contracting','Electrical Contractor','HVAC','Locksmith','Mechanical Service','Plumbing','Appliance Repair','Flooring Service','Handyman','Junk Removal','Painting','Pest Control','Pool and Spa Service','Renovations','Roofing Service','Snow Removal','Other'];
+const REVS = ['$0 - $50,000','$50,000 - $150,000','$150,000 - $500,000','$500,000 - $1,000,000','$1,000,000 - $2,000,000','$2,000,000+'];
+const YRS  = ['<1 year','1-2 years','3-5 years','6-10 years','10+ years'];
+const IND_GROUPS = [
+  {label:'Cleaning', items:['Bin Cleaning','Carpet Cleaning','Commercial Cleaning','Pressure Washing Service','Residential Cleaning','Window Washing']},
+  {label:'Green Industry', items:['Arborist / Tree Care','Landscaping Contractor','Lawn Care & Lawn Maintenance','Snow Removal']},
+  {label:'Contracting', items:['Construction & Contracting','Electrical Contractor','HVAC','Locksmith','Mechanical Service','Plumbing','Renovations','Roofing Service']},
+  {label:'Home Services', items:['Appliance Repair','Flooring Service','Handyman','Junk Removal','Painting','Pest Control','Pool and Spa Service','Other']},
+  {label:'Technology', items:['Computers & IT','Home Theater','Security and Alarm']},
+];
+const WIZARD_VISUALS = [
+  {img:'onboarding-step-1.png', k:'DID YOU KNOW...', t:'Businesses grow their revenue by 37% on average with Jobber.', c:'Tell us about your business so Jobber can tailor your setup.'},
+  {img:'onboarding-step-2.png', k:'DID YOU KNOW...', t:'Business owners who use Jobber save 7 hours a week.', c:'A few quick details help us suggest the right tools and workflows.'},
+  {img:'onboarding-step-3.png', k:'DID YOU KNOW...', t:'You can get paid 4x faster with Jobber’s online payments.', c:'Revenue helps us fine-tune the subscription recommendation.'},
+  {img:'onboarding-step-4.png', k:'QUOTE', t:'Jobber helps make our recurring customers feel like VIPs.', c:'Choose the outcome that matters most so your setup feels useful from day one.'},
+  {img:'onboarding-step-5.png', k:'WE’RE HERE TO HELP', t:'Your business run smoothly.', c:'Built-in reporting, client management, scheduling, and automations all in one place.'},
+];
+
+let wzStep = 1;
+const WZ_TOTAL = 4;
+
+function computeRec() {
+  let rank = 0;
+  const bump = p => { const r=PLAN_RANK[p]; if(r>rank)rank=r; };
+  if (WA.industry) bump(IND_PLAN[WA.industry]||'core');
+  bump(empPlan(WA.empCount));
+  if (WA.revenue) bump(REV_PLAN[WA.revenue]||'core');
+  if (WA.years)   bump(YRS_PLAN[WA.years]||'core');
+  for (const sg of WA.secondaryGoals) bump(SEC_PLAN[sg]||'core');
+  return PLAN_NAMES[rank];
+}
+
+// Warm, human recommendation copy for Screen 3
+function recCopy(rec) {
+  const pn = rec.charAt(0).toUpperCase()+rec.slice(1);
+  const n  = WA.empCount || 1;
+  const ind = WA.industry;
+  const goal = WA.primaryGoal;
+
+  const teamPhrase = n===1 ? 'a solo operation' : n<=3 ? `a tight team of ${n}` : `a growing team of ${n}`;
+  const indPhrase  = (ind && ind!=='Other') ? ind.toLowerCase() : null;
+
+  const goalMap = {
+    'I want my business to look as professional as my work': 'making a great first impression on every client',
+    'I want to feel in control, not like my business is running me': 'spending less time on admin and more time on the work',
+    'I want to win more jobs, but without the time consuming admin': 'winning more jobs without the paperwork slowing you down',
+    "I'm not sure yet, just exploring": 'finding the tools that actually fit the way you work'
+  };
+  const goalPhrase = goal ? goalMap[goal] : null;
+
+  const planFit = {
+    core:    'the essentials — clean, simple, and nothing you don\'t need yet.',
+    connect: 'everything you need to look sharp and run smoothly from day one.',
+    grow:    'the tools to scale without things slipping through the cracks.',
+    plus:    'the full platform — marketing, lead capture, and hands-on support included.'
+  };
+
+  let line = `<strong>${pn}</strong> looks like the right fit. `;
+  if (indPhrase) {
+    line += `${indPhrase.charAt(0).toUpperCase()+indPhrase.slice(1)} businesses running ${teamPhrase}`;
+  } else {
+    line += `For ${teamPhrase}`;
+  }
+  if (goalPhrase) line += `, focused on ${goalPhrase},`;
+  line += ` tend to get the most out of ${pn} — it gives you ${planFit[rec]}`;
+
+  return line;
+}
+
+let wzStep2Local = 1; // track team size locally during step 2
+
+function industryListHTML() {
+  return IND_GROUPS.map(group => `
+    <div class="industry-group">${group.label}</div>
+    ${group.items.map(i => `<button class="industry-item${WA.industry===i?' selected':''}" onclick="pickInd('${i.replace(/'/g,"\\'")}')">${i}</button>`).join('')}
+  `).join('');
+}
+
+function wizardPill(label, value, selected, handler) {
+  return `<button class="opt-btn${selected?' selected':''}" onclick="${handler}('${String(value).replace(/'/g,"\\'")}')">${label}</button>`;
+}
+
+function updateWizardVisual() {
+  const target = document.getElementById('wizard-visual-content');
+  const panel = document.getElementById('wizard-visual');
+  if (!target) return;
+  const visual = WIZARD_VISUALS[wzStep - 1] || WIZARD_VISUALS[0];
+  if (panel) panel.style.setProperty('--wizard-image', `url('${visual.img}')`);
+  target.innerHTML = `<div class="visual-kicker">${visual.k}</div><div class="visual-title">${visual.t}</div><div class="visual-copy">${visual.c}</div>`;
+}
+
+function renderWZ(instant) {
+  const card = document.getElementById('wizard-card');
+  document.getElementById('wz-progress').style.width = Math.round(wzStep/WZ_TOTAL*100)+'%';
+  document.getElementById('wz-step-label').textContent = `Step ${wzStep} of ${WZ_TOTAL}`;
+  updateWizardVisual();
+
+  const doRender = () => {
+
+  let h = '<div class="fade-in">';
+
+  if (wzStep === 1) {
+    h += `<div class="wizard-step-label">Step 1 of 5 — Industry</div>
+      <div class="wizard-q">Tell us about your business</div>
+      <div class="wizard-sub">Understanding your business helps us tailor Jobber to your needs. View our privacy policy.</div>
+      <input type="text" class="industry-search" placeholder="Search for your industry" onfocus="openIndustryDropdown()" onclick="openIndustryDropdown()" oninput="filterInds(this.value)">
+      <div class="industry-list" id="ind-list">
+        ${industryListHTML()}
+      </div><div style="margin-top:24px"></div>`;
+
+  } else if (wzStep === 2) {
+    const n = WA.empCount;
+    h += `<div class="wizard-step-label">Step 2 of 5 — Business profile</div>
+      <div class="wizard-q">Your ${(WA.industry || 'business').toLowerCase()} business at a glance</div>
+      <div class="wizard-sub">We use this information to suggest the right tools and workflows for your team.</div>
+      <div class="team-size-wrap">
+        <div class="wizard-pill-row">
+          <div class="wizard-pill-label">How many people work at your company (including you)?</div>
+          ${[[1,'Just me'],[3,'2-5 people'],[8,'6-10 people'],[13,'11-15 people'],[18,'16-20 people'],[25,'21+ people']].map(([v,label]) => {
+            const sel = v===1 ? n===1 : v===3 ? n>=2&&n<=5 : v===8 ? n>=6&&n<=10 : v===13 ? n>=11&&n<=15 : v===18 ? n>=16&&n<=20 : n>=21;
+            return `<button class="opt-btn${sel?' selected':''}" onclick="setTeamRange(${v})">${label}</button>`;
+          }).join('')}
+        </div>
+        <div class="wizard-pill-row">
+          <div class="wizard-pill-label">How many years have you been in business?</div>
+          ${YRS.map(o=>wizardPill(o,o,WA.years===o,'pickYr')).join('')}
+        </div>
+      </div>`;
+
+  } else if (wzStep === 3) {
+    h += `<div class="wizard-step-label">Step 3 of 5 — Revenue</div>
+      <div class="wizard-q">Let's fine-tune your Jobber experience</div>
+      <div class="wizard-sub">We use this to ensure the tools within scheduling, invoicing, and client management fit your business needs.</div>
+      <div class="wizard-pill-label with-gap">What’s your estimated revenue for this year?</div>
+      <div class="options-grid">
+        ${REVS.map(o=>wizardPill(o,o,WA.revenue===o,'pickRev')).join('')}
+      </div>`;
+
+  } else if (wzStep === 4) {
+    h += `<div class="wizard-step-label">Step 4 of 5 — Goals</div>
+      <div class="wizard-q">${(WA.industry || 'Your business').split(' ')[0]}, let's get Jobber working for you</div>
+      <div class="wizard-sub">Tell us what’s top of mind so we can tailor Jobber to your needs.</div>
+      <div class="options-grid" style="flex-direction:column;margin-bottom:24px;">
+        ${PG.map(g=>`<button class="goal-card${WA.primaryGoal===g.title?' selected':''}" onclick="pickPG('${g.title.replace(/'/g,"\\'")}')">
+          <div class="goal-card-icon">${g.icon}</div>
+          <div class="goal-card-title">${g.title}</div>
+          <div class="goal-card-desc">${g.desc}</div>
+        </button>`).join('')}
+      </div>`;
+    if (WA.primaryGoal) {
+      const secs = PG_SEC[WA.primaryGoal]||[];
+      const showOtherInput = WA.secondaryGoals.includes('Something else');
+      h += `<div class="secondary-goals">
+        <div class="secondary-title">Anything else on your list? <span style="font-weight:400;color:var(--navy-mid)">(optional)</span></div>
+        <div class="secondary-opts">
+          ${secs.map(s=>`<button class="secondary-opt${WA.secondaryGoals.includes(s)?' selected':''}" onclick="togSG('${s.replace(/'/g,"\\'")}')"> ${s} </button>`).join('')}
+        </div>
+        ${showOtherInput ? `<input type="text" class="other-input" placeholder="Tell us what you're looking for…" value="${WA.otherGoal}" oninput="WA.otherGoal=this.value">` : ''}
+      </div>`;
+    }
+  }
+
+  const canNext = (wzStep===1&&WA.industry)||(wzStep===2&&WA.empCount>=1&&WA.years)||(wzStep===3&&WA.revenue)||(wzStep===4&&WA.primaryGoal);
+  h += `<div class="wizard-nav" style="margin-top:8px;">
+    ${wzStep > 1 ? '<button class="btn-back-w" onclick="wzBack()">Back</button>' : '<span></span>'}
+    <button class="btn-next-w${wzStep===WZ_TOTAL?' green':''}" ${canNext?'':'disabled'} onclick="wzNext()">
+      ${wzStep===WZ_TOTAL?'See my plan':'Next ›'}
+    </button>
+  </div>
+  <div class="wizard-restart-row">
+    <button class="wz-restart-btn" onclick="restartFlow()" title="Start over">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5a4.5 4.5 0 1 1 1.1 2.95" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 9.5V6.5H5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Start over
+    </button>
+  </div></div>`;
+
+  card.innerHTML = h;
+  };
+
+  // If card already has content and this isn't an instant/internal re-render, animate
+  if (!instant && card.firstChild) {
+    const existing = card.querySelector('.fade-in, div');
+    if (existing) {
+      existing.classList.remove('fade-in');
+      existing.classList.add('fade-out');
+    }
+    setTimeout(doRender, 160);
+  } else {
+    doRender();
+  }
+}
+
+function filterInds(q) {
+  openIndustryDropdown();
+  document.querySelectorAll('.industry-item').forEach(el => {
+    el.style.display = el.textContent.trim().toLowerCase().includes(q.toLowerCase()) ? '' : 'none';
+  });
+}
+function openIndustryDropdown() {
+  const list = document.getElementById('ind-list');
+  if (list) list.classList.add('open');
+}
+function closeIndustryDropdown() {
+  const list = document.getElementById('ind-list');
+  if (list) list.classList.remove('open');
+}
+function pickInd(v) { WA.industry=v; renderWZ(true); setTimeout(()=>{ if(WA.industry)wzNext(); },220); }
+function adjTeam(d)    { WA.empCount=Math.max(1,(WA.empCount||1)+d); renderWZ(true); }
+function setTeam(v)    { const n=parseInt(v,10); if(!isNaN(n)&&n>=1) WA.empCount=n; }
+function setTeamRange(v) { WA.empCount=parseInt(v,10)||1; renderWZ(true); }
+function blurTeam(v)   { WA.empCount=Math.max(1,parseInt(v,10)||1); renderWZ(true); }
+function pickRev(v)    { WA.revenue=v; renderWZ(true); setTimeout(()=>wzNext(),220); }
+function pickYr(v)     { WA.years=v;   renderWZ(true); }
+function pickPG(v)     { WA.primaryGoal=v; WA.secondaryGoals=[]; renderWZ(true); }
+function togSG(v)      { const i=WA.secondaryGoals.indexOf(v); if(i>=0)WA.secondaryGoals.splice(i,1); else WA.secondaryGoals.push(v); renderWZ(true); }
+function wzNext()      { if(wzStep<WZ_TOTAL){wzStep++;renderWZ();}else{goToIP();} }
+function wzBack()      { if(wzStep>1){wzStep--;renderWZ();}else{showScreen('pricing');} }
+
+// ═══════════════════════════════════════════════════
+// SCREEN 3 (IN-PRODUCT)
+// ═══════════════════════════════════════════════════
+let ipN=1, ipB='annual', ipMT='acbm', ipDD=false, ipRec='connect', ipReady=false;
+const IP_TEAM_PRESETS = [1, 5, 10, 15];
+
+function syncIPTeamOptions(users) {
+  const control = document.querySelector('[data-team-control="ip"]');
+  if (!control) return;
+  const menu = control.querySelector('.team-size-menu');
+  if (!menu) return;
+
+  menu.innerHTML = IP_TEAM_PRESETS.map(n => (
+    `<button class="team-size-option" type="button" data-users="${n}">${n === 1 ? 'Just me' : n === 5 ? '2-5 members' : n === 10 ? '6-10 members' : '11-15+ members'}</button>`
+  )).join('');
+}
+
+function purchasableTeamSize(users) {
+  const requestedSeats = Math.max(1, users || 1);
+  return IP_TEAM_PRESETS.find(size => requestedSeats <= size) || 15;
+}
+
+const CKSV = `<svg class="check" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l3.5 3.5 7-7" stroke="#6DB523" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const CF = {
+  plus:    {t:'All Grow features, plus:', i:['Jobber Marketing Suite ($79 value)',"Book leads with Jobber's Receptionist ($99 value)",'Track your leads with Pipeline ($49 value)','Onboarding with a dedicated specialist','Premium Support ($99 value)','Guided API walkthrough for custom integrations']},
+  grow:    {t:'All Connect features, plus:', i:['Access advanced quote customizations','Add optional line items','Track time automatically','Track costs with job costing','Connect with customers through two-way SMS','Build custom workflow automations']},
+  connect: {t:'All Core features, plus:',   i:['Send automated reminders','Collect payments automatically','Document work on job forms','Automate quote and invoice follow-ups','Connect QuickBooks Online','Track time and expenses']},
+  core:    {t:'Key features:',              i:['Book and schedule jobs online','Send professional quotes','Send invoices and receive online payments','Create a professional website','Reporting','Access the app marketplace']},
+};
+const CD = {
+  plus:'For teams who want to scale complex operations with greater control across jobs, crews, and revenue.',
+  grow:'For contractors who want to win bigger jobs and grow more profitably.',
+  connect:'For pros who want to automate tasks and turn repeat work into more 5-star visits.',
+  core:'For the pro who wants to build and grow their business on one easy-to-use platform',
+};
+const COMPARE_SECTIONS = [
+  { title:'Customer management', rows:[
+    ['Client manager (CRM)', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Client hub', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Requests', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Online booking', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Automatic client notifications', {plus:'yes', grow:'yes', connect:'yes', core:'no'}],
+    ['Two-way text messaging', {plus:'yes', grow:'yes', connect:'no', core:'no'}],
+    ['Lead management', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Custom automation builder', {plus:'yes', grow:'yes', connect:'no', core:'no'}],
+    ['Receptionist', {plus:'yes', grow:'Add-on', connect:'Add-on', core:'Add-on'}],
+    ['Pipeline (beta)', {plus:'yes', grow:'no', connect:'no', core:'no'}],
+  ]},
+  { title:'Marketing Tools', rows:[
+    ['Marketing dashboard', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Website', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Marketing Suite', {plus:'yes', grow:'Add-on', connect:'Add-on', core:'Add-on'}],
+  ]},
+  { title:'Job Tracking', rows:[
+    ['Scheduling', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Job details and attachments', {plus:'yes', grow:'yes', connect:'yes', core:'yes'}],
+    ['Checklists', {plus:'yes', grow:'yes', connect:'yes', core:'no'}],
+  ]},
+];
+
+const billingSuffix = b => b === 'annual' ? 'billed annually' : b === 'acbm' ? 'billed monthly' : 'billed monthly';
+const billingPriceNote = b => b === 'annual' ? 'for 12 months billed annually' : b === 'acbm' ? 'for 12 months billed monthly' : 'billed monthly';
+function seatBillingLabel(plan, users, billing) {
+  if (plan === 'core') return `1 seat · ${billingSuffix(billing)}`;
+  const seats = plan === 'plus' ? Math.max(users, 5) : users;
+  return `${seats >= 16 ? '16+' : seats} ${seats === 1 ? 'seat' : 'seats'} · ${billingSuffix(billing)}`;
+}
+
+function planSeatLabel(plan, users) {
+  if (users >= 16) return 'At least 16 seats';
+  if (plan === 'plus') return `${Math.max(users, 5)} users`;
+  if (plan === 'grow') return `${users >= 10 ? 10 : users >= 5 ? 5 : 1} ${users === 1 ? 'user' : 'users'}`;
+  if (plan === 'connect') return `${users >= 5 ? 5 : 1} ${users === 1 ? 'user' : 'users'}`;
+  return '1 user';
+}
+
+function planBadgeHTML(plan) {
+  if (plan === 'plus') return '<span class="badge-rec green">Recommended</span>';
+  return '';
+}
+
+function ipCardHTML(plan, users, billing, isHL) {
+  const contactSales = users >= 16;
+  const priceUsers = contactSales ? 16 : users;
+  const price = contactSales ? null : plan==='core' ? getPrice('core',1,billing,true) : getPrice(plan,priceUsers,billing,false);
+  const comparePrice = contactSales || plan==='core' || billing === 'monthly' ? null : getPrice(plan,priceUsers,'monthly',false);
+  const f = CF[plan];
+  const pn = plan.charAt(0).toUpperCase()+plan.slice(1);
+  const grey = (plan==='core'&&users>1)?' greyed':'';
+  const hl   = isHL?' highlighted':'';
+  const additionalSeatNote = users >= 15 ? '<div class="card-additional-seat-note">Additional seats are USD $29/mo</div>' : '';
+
+  return `<div class="card plan-${plan}${grey}${hl}">
+    <div class="card-top">
+      <div class="card-name-row"><div class="card-name">${pn}</div>${planBadgeHTML(plan)}</div>
+      <div class="card-desc">${CD[plan]}</div>
+    </div>
+    <div class="card-price">
+      ${comparePrice ? `<div class="price-compare">$${comparePrice}/mo</div>` : ''}
+      <div class="price-row"><span class="price-amount${contactSales?' chat-copy':''}">${contactSales ? "Let's chat" : '$'+price}</span>${contactSales ? '' : '<span class="price-mo">/mo</span>'}</div>
+      <div class="price-note">${contactSales ? 'Contact sales for custom pricing' : seatBillingLabel(plan, users, billing)}</div>
+    </div>
+    <div class="card-features">
+      <div class="features-title">${f.t}</div>
+      ${f.i.map(x=>`<div class="feature">${CKSV}${x}</div>`).join('')}
+    </div>
+    <div class="card-cta">
+      ${contactSales
+        ? (plan === 'plus' ? `<button class="btn-trial">Contact Sales</button>` : `<button class="btn-contact-sales-plan">Contact Sales</button>`)
+        : plan === 'plus' || isHL
+        ? `<button class="btn-trial">Choose Plan</button>`
+        : `<button class="btn-secondary-plan">Choose Plan</button>`
+      }
+      ${additionalSeatNote}
+    </div>
+  </div>`;
+}
+
+function compareValueHTML(value) {
+  if (value === 'yes') return '<span class="compare-check">✓</span>';
+  if (value === 'Add-on') return '<span class="compare-addon">Add-on</span>';
+  return '<span class="compare-dash">-</span>';
+}
+
+function renderCompareTable(plans) {
+  const table = document.getElementById('compare-table');
+  if (!table) return;
+  const columns = ['features', ...plans];
+  const planName = plan => plan.charAt(0).toUpperCase() + plan.slice(1);
+  let html = `<div class="compare-grid" style="grid-template-columns:1.15fr repeat(${plans.length}, 1fr)">`;
+  html += '<div class="compare-cell compare-head"></div>';
+  html += plans.map(plan => `<div class="compare-cell compare-head"><div>${planName(plan)}</div><button class="compare-plan-button" type="button">Choose Plan</button></div>`).join('');
+  COMPARE_SECTIONS.forEach(section => {
+    html += `<div class="compare-cell compare-section-title">${section.title}</div>`;
+    plans.forEach(() => { html += '<div class="compare-cell compare-section-title"></div>'; });
+    section.rows.forEach(([label, values]) => {
+      html += `<div class="compare-cell compare-feature-name"><span>${label}</span><span>⌄</span></div>`;
+      plans.forEach(plan => {
+        html += `<div class="compare-cell">${compareValueHTML(values[plan])}</div>`;
+      });
+    });
+  });
+  html += '</div>';
+  table.innerHTML = html;
+}
+
+function ipUpdate() {
+  const u = ipN, b = ipB, rec = u >= 5 ? 'plus' : ipRec;
+  const over15 = u > 15;
+
+  syncIPTeamOptions(u);
+  updateTeamChoice('ip', u);
+
+  document.getElementById('ip-opt-m').classList.toggle('active', b!=='annual');
+  document.getElementById('ip-opt-a').classList.toggle('active', b==='annual');
+  document.getElementById('ip-dd1').classList.toggle('selected', ipMT==='acbm');
+  document.getElementById('ip-dd2').classList.toggle('selected', ipMT==='monthly');
+  document.getElementById('ip-mlabel').textContent = (b!=='annual'&&ipMT==='acbm')?'Monthly for 1 yr':'Monthly';
+  const sv=document.getElementById('ip-savings');
+  sv.innerHTML=savingsHTML(b); sv.classList.toggle('hidden',!savingsHTML(b));
+
+  document.getElementById('ip-over15').style.display = 'none';
+
+  const plans = ['plus','grow','connect','core'].filter(p => !(u === 1 && p === 'plus') && !(u >= 5 && p === 'core'));
+  document.getElementById('ip-cards-grid').classList.toggle('three-cards', plans.length === 3);
+  document.getElementById('ip-badge-row').innerHTML = '';
+
+  document.getElementById('ip-cards-grid').innerHTML = plans.map(p=>ipCardHTML(p,u,b,p===rec)).join('');
+  renderCompareTable(plans);
+}
+
+function ipSetup() {
+  if (ipReady) return; ipReady=true;
+  document.getElementById('ip-opt-a').addEventListener('click', ()=>{ ipB='annual'; ipCDD(); ipUpdate(); });
+  document.getElementById('ip-opt-m').addEventListener('click', e=>{ e.stopPropagation(); if(ipDD){ipCDD();}else{ipODD();ipB=ipMT;ipUpdate();} });
+  document.getElementById('ip-dd1').addEventListener('click', e=>{ e.stopPropagation(); ipMT='acbm'; ipB='acbm'; ipCDD(); ipUpdate(); });
+  document.getElementById('ip-dd2').addEventListener('click', e=>{ e.stopPropagation(); ipMT='monthly'; ipB='monthly'; ipCDD(); ipUpdate(); });
+  document.querySelector('[data-team-control="ip"]').addEventListener('click', e => {
+    const trigger = e.target.closest('.team-size-trigger');
+    if (trigger) {
+      e.stopPropagation();
+      toggleTeamDropdown('ip');
+      return;
+    }
+    const btn = e.target.closest('.team-size-option');
+    if (!btn) return;
+    ipN = parseInt(btn.dataset.users, 10);
+    closeTeamDropdown('ip');
+    ipUpdate();
+  });
+  const compareToggle = document.getElementById('compare-toggle');
+  const compareChart = document.getElementById('compare-chart');
+  compareToggle.addEventListener('click', () => {
+    const isOpen = compareChart.classList.toggle('open');
+    compareToggle.classList.toggle('open', isOpen);
+    compareToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+}
+function ipODD(){ ipDD=true;  document.getElementById('ip-mdd').classList.add('open'); document.getElementById('ip-chev').classList.add('open'); }
+function ipCDD(){ ipDD=false; document.getElementById('ip-mdd').classList.remove('open'); document.getElementById('ip-chev').classList.remove('open'); }
+document.addEventListener('click',e=>{ if(ipDD&&document.getElementById('ip-bwrap')&&!document.getElementById('ip-bwrap').contains(e.target))ipCDD(); if(!e.target.closest('[data-team-control="ip"]'))closeTeamDropdown('ip'); });
+
+// ═══════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════
+function restartFlow() {
+  // Reset all wizard answers
+  WA.industry = null; WA.empCount = 1; WA.revenue = null; WA.years = null;
+  WA.primaryGoal = null; WA.secondaryGoals = []; WA.otherGoal = '';
+  // Reset in-product state
+  ipN = 1; ipB = 'annual'; ipMT = 'acbm'; ipDD = false; ipRec = 'connect';
+  // Go all the way back to Screen 1
+  showScreen('pricing');
+}
+
+function showScreen(name) {
+  const next = document.getElementById('screen-'+name);
+  const current = document.querySelector('.screen.active');
+  if (current === next) return;
+  if (current) {
+    current.style.transition = 'opacity .2s ease';
+    current.style.opacity = '0';
+    current.style.pointerEvents = 'none';
+    setTimeout(() => {
+      current.classList.remove('active');
+      current.style.opacity = '';
+      current.style.pointerEvents = '';
+      next.classList.add('active');
+      window.scrollTo(0, 0);
+    }, 200);
+  } else {
+    next.classList.add('active');
+    window.scrollTo(0, 0);
+  }
+}
+function goToWizard(fromIP) {
+  if (!fromIP) WA.empCount = p1N;
+  wzStep = fromIP ? WZ_TOTAL : 1;
+  showScreen('wizard');
+  setTimeout(() => renderWZ(false), 60);
+}
+function wzNext() { if(wzStep<WZ_TOTAL){wzStep++;renderWZ(false);}else{goToIP();} }
+function wzBack() { if(wzStep>1){wzStep--;renderWZ(false);} }
+function goToIP() {
+  ipRec = computeRec();
+  ipN = purchasableTeamSize(WA.empCount);
+
+  // Set content before the screen fades in so there's no flash
+  const parts = [];
+  if (WA.industry) parts.push(WA.industry);
+  parts.push(ipN===1?'1 person':`${ipN} people`);
+  document.getElementById('ip-badge-text').textContent = 'Personalized · '+parts.join(' · ');
+  document.getElementById('ip-rec-text').innerHTML = recCopy(ipRec);
+  ipRec = ipN >= 5 ? 'plus' : ipRec;
+  ipSetup();
+  ipUpdate();
+
+  showScreen('inproduct');
+}
+</script>
+</body>
+</html>
