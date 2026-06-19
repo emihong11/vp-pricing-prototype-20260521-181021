@@ -344,14 +344,14 @@
         <span class="control-label">Team size</span>
         <div class="team-size-options" data-team-control="p1">
           <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-            <span data-team-label="p1">2-5 members</span>
+            <span data-team-label="p1">2-5 people</span>
             <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
           <div class="team-size-menu" role="listbox" aria-label="Team size">
             <button class="team-size-option" type="button" data-users="1">Just me</button>
-            <button class="team-size-option" type="button" data-users="5">2-5 members</button>
-            <button class="team-size-option" type="button" data-users="10">6-10 members</button>
-            <button class="team-size-option" type="button" data-users="15">11-15 members</button>
+            <button class="team-size-option" type="button" data-users="5">2-5 people</button>
+            <button class="team-size-option" type="button" data-users="10">6-10 people</button>
+            <button class="team-size-option" type="button" data-users="15">11-15 people</button>
             <button class="team-size-option" type="button" data-users="16">16 or more</button>
           </div>
         </div>
@@ -570,7 +570,7 @@
           <span class="control-label">Team size</span>
           <div class="team-size-options" data-team-control="ip">
             <button class="team-size-trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-              <span data-team-label="ip">2-5 members</span>
+              <span data-team-label="ip">2-5 people</span>
               <svg class="team-size-edit-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
             <div class="team-size-menu" role="listbox" aria-label="Team size"></div>
@@ -1160,7 +1160,7 @@ function syncIPTeamOptions(users) {
   if (!menu) return;
 
   menu.innerHTML = IP_TEAM_PRESETS.map(n => (
-    `<button class="team-size-option" type="button" data-users="${n}">${n === 1 ? 'Just me' : n === 5 ? '2-5 members' : n === 10 ? '6-10 members' : '11-15+ members'}</button>`
+    `<button class="team-size-option" type="button" data-users="${n}">${n === 1 ? 'Just me' : n === 5 ? '2-5 people' : n === 10 ? '6-10 people' : '11-15+ people'}</button>`
   )).join('');
 }
 
